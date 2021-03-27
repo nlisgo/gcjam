@@ -4,7 +4,7 @@ Number.prototype.toCase = function () {
 
 const solve = (x = 0, y = 0, s = '') => {
 
-	s = s.replace('?', '');
+  s = s.replace(/\?/g, '');
   //console.log(s);
 	//console.log((s.match(/JC/g) || []).length);
   //console.log((s.match(/CJ/g) || []).length);
