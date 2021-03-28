@@ -1,46 +1,64 @@
 Number.prototype.toCase = function () {
-  return this.valueOf()+1;
+    return this.valueOf()+1;
 };
 
-const solve = (x = 0, y = 0, s = '') => {
-  s = s.replace(/\?/g, '');
-  var  cost = ((s.match(/CJ/g) || []).length * x) + ((s.match(/JC/g) || []).length * y);
+const solve = (x, y, s) => {
+    let newS = s;
 
-  return cost;
+    if (x < 0 || y < 0) {
+        if (x === Math.min(x, y)) {
+            newS = newS.replace(/(\?J|C\?|\?\?)/g, 'CJ');
+            if (y < 0) {
+                newS = newS.replace(/(\?C|J\?)/g, 'JC');
+            }
+        } else {
+            newS = newS.replace(/(\?C|J\?|\?\?)/g, 'JC');
+            if (x < 0) {
+                newS = newS.replace(/(\?J|C\?)/g, 'CJ');
+            }
+        }
+    }
+
+    return ((newS.replace(/\?/g, '').match(/CJ/g) || []).length * x) + ((newS.replace(/\?/g, '').match(/JC/g) || []).length * y);
 };
 
 const solveInputs = inputs => {
-  const cases = [];
-  inputs.slice(1).forEach((data, i) => {
-    var parts = data.split(' ');
-    cases.push(`Case #${i.toCase()}: ${solve(parts[0], parts[1], parts[2])}`);
-  });
-  return cases;
+    const cases = [];
+    inputs.slice(1).forEach((data, i) => {
+        cases.push(`Case #${i.toCase()}: ${solve(...data.split(' ').map(i => {
+            if (!isNaN(i)) {
+                return Number(i);
+            }
+
+            return i;
+        }))}`);
+    });
+    return cases;
 };
 
 const handleStdin = () => {
-  const readline = require('readline');
+    const readline = require('readline');
 
-  const inputs = [];
+    const inputs = [];
 
-  const rl = readline.createInterface({
-    input: process.stdin
-  });
-
-  rl.on('line', line => {
-    inputs.push(line);
-  }).on('close', () => {
-    solveInputs(inputs).forEach(out => {
-      console.log(out);
+    const rl = readline.createInterface({
+        input: process.stdin
     });
-  });
+
+    rl.on('line', line => {
+        inputs.push(line);
+    }).on('close', () => {
+        solveInputs(inputs).forEach(out => {
+            console.log(out);
+        });
+    });
 };
 
 if (!Boolean(process.stdin.isTTY)) {
-  handleStdin();
+    handleStdin();
 }
 
 module.exports = {
-  solve,
-  solveInputs,
+    solve,
+    solveInputs,
 };
