@@ -17,7 +17,7 @@ const solveInputs = inputs => {
 	const cases = [];
 	let i = 0;
 	inputs.slice(1).forEach((data) => {
-		if (data.split(' ').length > 1) {console
+		if (data.split(' ').length > 1) {
 			cases.push(`Case #${i.toCase()}: ${solve(data.split(' ').map(Number))}`);
 			i++;
 		}
