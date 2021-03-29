@@ -46,53 +46,7 @@ describe('solve', () => {
     });
 
     test('6, -4, J??C', () => {
-        expect(moonsAndUmbrellas.solve(6, -4, 'J??C')).toBe(-8);
-    });
-});
-
-describe('prepareMoonsAndUmbrellas', () => {
-    test('CJ?CC?, 2, 3', () => {
-        expect(moonsAndUmbrellas.prepareMoonsAndUmbrellas('CJ?CC?', 2, 3)).toBe('CJCC');
-    });
-
-    test('CJCJ, 4, 2', () => {
-        expect(moonsAndUmbrellas.prepareMoonsAndUmbrellas('CJCJ', 4, 2)).toBe('CJCJ');
-    });
-
-    test('C?J, 2, 3', () => {
-        expect(moonsAndUmbrellas.prepareMoonsAndUmbrellas('C?J', 1, 3)).toBe('CJ');
-    });
-
-    test('??J???, 2, 5', () => {
-        expect(moonsAndUmbrellas.prepareMoonsAndUmbrellas('??J???', 2, 5)).toBe('J');
-    });
-
-    test('??J??, 2, -5', () => {
-        expect(moonsAndUmbrellas.prepareMoonsAndUmbrellas('??J??', 2, -5)).toBe('JCJC');
-    });
-
-    test('C?C, 2, -5', () => {
-        expect(moonsAndUmbrellas.prepareMoonsAndUmbrellas('C?C', 2, -5)).toBe('CJC');
-    });
-
-    test('C?C, -5, -3', () => {
-        expect(moonsAndUmbrellas.prepareMoonsAndUmbrellas('C?C', -5, -3)).toBe('CJC');
-    });
-
-    test('C?C, -1, 2', () => {
-        expect(moonsAndUmbrellas.prepareMoonsAndUmbrellas('C?C', -1, 2)).toBe('CC');
-    });
-
-    test('J??C, -1, -2', () => {
-        expect(moonsAndUmbrellas.prepareMoonsAndUmbrellas('J??C', -1, -2)).toBe('JCJC');
-    });
-
-    test('J??C, 6, -1', () => {
-        expect(moonsAndUmbrellas.prepareMoonsAndUmbrellas('J??C', 6, -1)).toBe('JC');
-    });
-
-    test('J??C, 6, -4', () => {
-        expect(moonsAndUmbrellas.prepareMoonsAndUmbrellas('J??C', 6, -4)).toBe('JCJC');
+        expect(moonsAndUmbrellas.solve(6, -4, 'J??C')).toBe(-4);
     });
 });
 
@@ -115,5 +69,18 @@ describe('solveInputs', () => {
                 'Case #5: -8',
             ]
         );
+    });
+});
+
+describe('splitS', () => {
+    test('??CC?J?CCJ??J', () => {
+        expect(moonsAndUmbrellas.splitS('??CC?J?CCJ??J'))
+        .toStrictEqual([
+            'CCJ',
+            '??C',
+            'C?J',
+            'J?C',
+            'J??J',
+        ]);
     });
 });

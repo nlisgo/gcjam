@@ -3,30 +3,57 @@ Number.prototype.toCase = function () {
 };
 
 const solve = (costCJ, costJC, s) => {
-    const newS = prepareMoonsAndUmbrellas(s, costCJ, costJC);
+    const splits = splitS(s).map(split => {
+        return cheapestOption(options(split), costCJ, costJC)[1];
+    });
 
-    return ((newS.match(/CJ/g) || []).length * costCJ) + ((newS.match(/JC/g) || []).length * costJC);
+    return splits.reduce((a, b) => a + b, 0);
 };
 
-const prepareMoonsAndUmbrellas = (s, costCJ, costJC) => {
-    let newS = s;
+const splitS = s => {
+    const reg = /(^|[^\?])\?+([^\?]|$)/g;
+    const matches = [];
+    let found;
+    while (found = reg.exec(s)) {
+        matches.push(found[0]);
+        reg.lastIndex = found.index+1;
+    }
 
-    if (costCJ < 0 || costJC < 0) {
-        if (costCJ === Math.min(costCJ, costJC)) {
-            newS = newS.replace(/(\?J|C\?|\?\?)/g, 'CJ');
-            if (costJC < 0) {
-                newS = newS.replace(/(\?C|J\?)/g, 'JC');
-            }
-        } else {
-            newS = newS.replace(/(\?C|J\?|\?\?)/g, 'JC');
-            if (costCJ < 0) {
-                newS = newS.replace(/(\?J|C\?)/g, 'CJ');
+    return [...s.replace(/(^\?+|\?+$)/g, '').split(/\?+/).concat(matches)].filter(i => i.charAt(0).repeat(i.length) !== i);
+};
+
+const restoreS = split => {
+    return split.join('|').replace(/\|./g, '');
+};
+
+const options = s => {
+    const len = (s.match(/\?/g) || []).length;
+
+    return [
+        s.replace(/\?+/g, 'C'.repeat(len)),
+        s.replace(/\?+/g, 'J'.repeat(len)),
+        s.replace(/\?+/g, 'CJ'.repeat(len).substring(0, len)),
+        s.replace(/\?+/g, 'JC'.repeat(len).substring(0, len)),
+    ].filter((v, i, a) => a.indexOf(v) === i);
+};
+
+const cheapestOption = (options, costCJ, costJC) => {
+    let cheapO = options[0];
+    let cheap = optionCost(cheapO, costCJ, costJC);
+
+    if (options.length > 1) {
+        for (let i = 1; i < options.length; i++) {
+            let compareCost = optionCost(options[i], costCJ, costJC);
+            if (compareCost < cheap) {
+                cheap = compareCost;
+                cheapO = options[i];
             }
         }
     }
-
-    return newS.replace(/\?/g, '');
+    return [cheapO, cheap];
 };
+
+const optionCost = (option, costCJ, costJC) => ((option.match(/CJ/g) || []).length * costCJ) + ((option.match(/JC/g) || []).length * costJC);
 
 const solveInputs = inputs => {
     const cases = [];
@@ -67,5 +94,9 @@ if (!Boolean(process.stdin.isTTY)) {
 module.exports = {
     solve,
     solveInputs,
-    prepareMoonsAndUmbrellas,
+    options,
+    splitS,
+    optionCost,
+    cheapestOption,
+    restoreS,
 };
