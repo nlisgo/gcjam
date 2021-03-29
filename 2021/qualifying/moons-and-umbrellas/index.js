@@ -5,7 +5,7 @@ Number.prototype.toCase = function () {
 const solve = (x, y, s) => {
     const newS = prepareMoonsAndUmbrellas(s, x, y);
 
-    return ((newS.replace(/\?/g, '').match(/CJ/g) || []).length * x) + ((newS.replace(/\?/g, '').match(/JC/g) || []).length * y);
+    return ((newS.match(/CJ/g) || []).length * x) + ((newS.match(/JC/g) || []).length * y);
 };
 
 const prepareMoonsAndUmbrellas = (s, x, y) => {
