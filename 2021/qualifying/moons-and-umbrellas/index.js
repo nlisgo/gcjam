@@ -2,34 +2,30 @@ Number.prototype.toCase = function () {
     return this.valueOf()+1;
 };
 
-const solve = (x, y, s) => {
-    const newS = prepareMoonsAndUmbrellas(s, x, y);
+const solve = (costCJ, costJC, s) => {
+    const newS = prepareMoonsAndUmbrellas(s, costCJ, costJC);
 
-    return ((newS.match(/CJ/g) || []).length * x) + ((newS.match(/JC/g) || []).length * y);
+    return ((newS.match(/CJ/g) || []).length * costCJ) + ((newS.match(/JC/g) || []).length * costJC);
 };
 
-const prepareMoonsAndUmbrellas = (s, x, y) => {
-    if (x >= 0 && y >= 0) {
-        return s.replace(/\?/g, '');
-    }
-
+const prepareMoonsAndUmbrellas = (s, costCJ, costJC) => {
     let newS = s;
 
-    if (x < 0 || y < 0) {
-        if (x === Math.min(x, y)) {
+    if (costCJ < 0 || costJC < 0) {
+        if (costCJ === Math.min(costCJ, costJC)) {
             newS = newS.replace(/(\?J|C\?|\?\?)/g, 'CJ');
-            if (y < 0) {
+            if (costJC < 0) {
                 newS = newS.replace(/(\?C|J\?)/g, 'JC');
             }
         } else {
             newS = newS.replace(/(\?C|J\?|\?\?)/g, 'JC');
-            if (x < 0) {
+            if (costCJ < 0) {
                 newS = newS.replace(/(\?J|C\?)/g, 'CJ');
             }
         }
     }
 
-    return newS;
+    return newS.replace(/\?/g, '');
 };
 
 const solveInputs = inputs => {
