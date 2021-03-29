@@ -13,12 +13,34 @@ describe('solve', () => {
         expect(moonsAndUmbrellas.solve(1, 3, 'C?J')).toBe(1);
     });
 
-    test('2 5 ??J???', () => {
+    test('2, 5, ??J???', () => {
         expect(moonsAndUmbrellas.solve(2, 5, '??J???')).toBe(0);
     });
 
-    test('2 -5 ??J??', () => {
+    test('2, -5, ??J??', () => {
         expect(moonsAndUmbrellas.solve(2, -5, '??J??')).toBe(-8);
+    });
+});
+
+describe('prepareMoonsAndUmbrellas', () => {
+    test('CJ?CC?, 2, 3', () => {
+        expect(moonsAndUmbrellas.prepareMoonsAndUmbrellas('CJ?CC?', 2, 3)).toBe('CJCC');
+    });
+
+    test('CJCJ, 4, 2', () => {
+        expect(moonsAndUmbrellas.prepareMoonsAndUmbrellas('CJCJ', 4, 2)).toBe('CJCJ');
+    });
+
+    test('C?J, 2, 3', () => {
+        expect(moonsAndUmbrellas.prepareMoonsAndUmbrellas('C?J', 1, 3)).toBe('CJ');
+    });
+
+    test('??J???, 2, 5', () => {
+        expect(moonsAndUmbrellas.prepareMoonsAndUmbrellas('??J???', 2, 5)).toBe('J');
+    });
+
+    test('??J??, 2, -5', () => {
+        expect(moonsAndUmbrellas.prepareMoonsAndUmbrellas('??J??', 2, -5)).toBe('JCJC');
     });
 });
 
