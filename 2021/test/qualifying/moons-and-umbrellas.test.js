@@ -72,15 +72,56 @@ describe('solveInputs', () => {
     });
 });
 
-describe('splitS', () => {
-    test('??CC?J?CCJ??J', () => {
-        expect(moonsAndUmbrellas.splitS('??CC?J?CCJ??J'))
-        .toStrictEqual([
-            'CCJ',
-            '??C',
-            'C?J',
-            'J?C',
-            'J??J',
-        ]);
+describe('optimise moons and umbrellas', () => {
+    const optimiseS = (s, costCJ, costJC) => {
+        return moonsAndUmbrellas.splitS(s).map(split => moonsAndUmbrellas.cheapestOption(moonsAndUmbrellas.options(split), costCJ, costJC)[0]).join('|').replace(/\|./g, '');
+    };
+
+    test('CJ?CC?, 2, 3', () => {
+        expect(optimiseS('CJ?CC?', 2, 3)).toBe('CJCCCC');
+    });
+
+    test('CJCJ, 4, 2', () => {
+        expect(optimiseS('CJCJ', 4, 2)).toBe('CJCJ');
+    });
+
+    test('C?J, 2, 3', () => {
+        expect(optimiseS('C?J', 1, 3)).toBe('CCJ');
+    });
+
+    test('??J???, 2, 5', () => {
+        expect(optimiseS('??J???', 2, 5)).toBe('JJJJJJ');
+    });
+
+    test('??J??, 2, -5', () => {
+        expect(optimiseS('??J??', 2, -5)).toBe('JCJCC');
+    });
+
+    test('C?C, 2, -5', () => {
+        expect(optimiseS('C?C', 2, -5)).toBe('CJC');
+    });
+
+    test('C?C, -5, -3', () => {
+        expect(optimiseS('C?C', -5, -3)).toBe('CJC');
+    });
+
+    test('C?C, -1, 2', () => {
+        expect(optimiseS('C?C', -1, 2)).toBe('CCC');
+    });
+
+    test('J??C, -1, -2', () => {
+        expect(optimiseS('J??C', -1, -2)).toBe('JCJC');
+    });
+
+    test('J??C, 6, -1', () => {
+        expect(optimiseS('J??C', 6, -1)).toBe('JCCC');
+    });
+
+    test('J??C, 6, -4', () => {
+        expect(optimiseS('J??C', 6, -4)).toBe('JCCC');
+    });
+
+    test('J??C, 6, -7', () => {
+        expect(optimiseS('J??C', 6, -7)).toBe('JCJC');
     });
 });

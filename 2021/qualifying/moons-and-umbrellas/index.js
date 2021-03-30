@@ -11,7 +11,7 @@ const solve = (costCJ, costJC, s) => {
 };
 
 const splitS = s => {
-    const reg = /(^|[^\?])\?+([^\?]|$)/g;
+    const reg = /((^|[^\?])\?+([^\?]|$)|(^|[\?])[^\?]+([\?]|$))/g;
     const matches = [];
     let found;
     while (found = reg.exec(s)) {
@@ -19,7 +19,21 @@ const splitS = s => {
         reg.lastIndex = found.index+1;
     }
 
-    return [...s.replace(/(^\?+|\?+$)/g, '').split(/\?+/).concat(matches)].filter(i => i.charAt(0).repeat(i.length) !== i);
+    return matches.map((m, i) => {
+        if (i === 0 && m.match(/^[^\?]+\?/g)) {
+            return m.replace(/\?$/g, '');
+        }
+
+        if (m.match(/^\?[^\?]+\?$/g)) {
+            return m.replace(/(^\?|\?$)/g, '');
+        }
+
+        if (i === matches.length - 1 && m.match(/\?[^\?]+$/g)) {
+            return m.replace(/^\?/g, '');
+        }
+
+        return m;
+    });
 };
 
 const restoreS = split => {
