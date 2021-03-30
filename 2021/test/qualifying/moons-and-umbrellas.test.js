@@ -48,6 +48,18 @@ describe('solve', () => {
     test('6, -4, J??C', () => {
         expect(moonsAndUmbrellas.solve(6, -4, 'J??C')).toBe(-4);
     });
+
+    test('-2, -3, ??', () => {
+        expect(moonsAndUmbrellas.solve(-2, -3, '??')).toBe(-3);
+    });
+
+    test('1, 3, ?????', () => {
+        expect(moonsAndUmbrellas.solve(1, 3, '?????')).toBe(0);
+    });
+
+    test('-10, 3, ?????', () => {
+        expect(moonsAndUmbrellas.solve(-10, 3, '?????')).toBe(-14);
+    });
 });
 
 describe('solveInputs', () => {
@@ -123,5 +135,17 @@ describe('optimise moons and umbrellas', () => {
 
     test('J??C, 6, -7', () => {
         expect(optimiseS('J??C', 6, -7)).toBe('JCJC');
+    });
+
+    test('??, -2, -3', () => {
+        expect(optimiseS('??', -2, -3)).toBe('JC');
+    });
+
+    test('?????, 1, 3', () => {
+        expect(optimiseS('?????', 1, 3)).toBe('CCCCC');
+    });
+
+    test('?????, -10, 3', () => {
+        expect(optimiseS('?????', -10, 3)).toBe('CJCJC');
     });
 });
