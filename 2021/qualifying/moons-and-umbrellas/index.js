@@ -3,6 +3,10 @@ Number.prototype.toCase = function () {
 };
 
 const solve = (costCJ, costJC, s) => {
+    if (costCJ > 0 && costJC >= 0) {
+        return optionCost(s.replace(/\?/g, ''), costCJ, costJC);
+    }
+
     const splits = splitS(s).map(split => {
         return cheapestOption(options(split), costCJ, costJC)[1];
     });
