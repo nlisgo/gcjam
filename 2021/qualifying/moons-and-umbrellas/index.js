@@ -3,10 +3,6 @@ Number.prototype.toCase = function () {
 };
 
 const solve = (costCJ, costJC, s) => {
-    if (costCJ > 0 && costJC >= 0) {
-        return optionCost(s.replace(/\?/g, ''), costCJ, costJC);
-    }
-
     const splits = splitS(s).map(split => {
         return cheapestOption(options(split), costCJ, costJC)[1];
     });
@@ -15,33 +11,25 @@ const solve = (costCJ, costJC, s) => {
 };
 
 const splitS = s => {
-    const reg = /((^|[^\?])\?+([^\?]|$)|(^|[\?])[^\?]+([\?]|$))/g;
-    const matches = [];
-    let found;
-    while (found = reg.exec(s)) {
-        matches.push(found[0]);
-        reg.lastIndex = found.index+1;
+    sArray = s.split('');
+    parts = [];
+    let part = '';
+    for (let i = 0; i < sArray.length; i++) {
+        part += sArray[i];
+
+        if (i === sArray.length - 1 && part.length > 1) {
+            parts.push(part);
+        } else if (sArray[i] !== '?' && sArray[i + 1] === '?') {
+            parts.push(part);
+            part = sArray[i];
+        } else if (sArray[i] === '?' && sArray[i + 1] !== '?') {
+            part += sArray[i + 1];
+            parts.push(part);
+            part = '';
+        }
     }
 
-    return matches.map((m, i) => {
-        if (i === 0 && m.match(/^[^\?]+\?/g)) {
-            return m.replace(/\?$/g, '');
-        }
-
-        if (m.match(/^\?[^\?]+\?$/g)) {
-            return m.replace(/(^\?|\?$)/g, '');
-        }
-
-        if (i === matches.length - 1 && m.match(/\?[^\?]+$/g)) {
-            return m.replace(/^\?/g, '');
-        }
-
-        return m;
-    });
-};
-
-const restoreS = split => {
-    return split.join('|').replace(/\|./g, '');
+    return parts;
 };
 
 const options = s => {
@@ -116,5 +104,4 @@ module.exports = {
     splitS,
     optionCost,
     cheapestOption,
-    restoreS,
 };
