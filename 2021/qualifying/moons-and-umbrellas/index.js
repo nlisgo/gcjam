@@ -29,7 +29,7 @@ const splitS = s => {
         }
     }
 
-    return parts;
+    return parts.filter(part => part.length > 1);
 };
 
 const options = s => {

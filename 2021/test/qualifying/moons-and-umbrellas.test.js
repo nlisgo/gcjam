@@ -88,6 +88,18 @@ describe('solveInputs', () => {
     });
 });
 
+describe('splitS', () => {
+    test('?JC??J?JJ', () => {
+        expect(moonsAndUmbrellas.splitS('?JC??J?JJ')).toStrictEqual([
+            '?J',
+            'JC',
+            'C??J',
+            'J?J',
+            'JJ',
+        ]);
+    });
+});
+
 describe('optimise moons and umbrellas', () => {
     const optimiseS = (s, costCJ, costJC) => {
         return moonsAndUmbrellas.splitS(s).map(split => moonsAndUmbrellas.cheapestOption(moonsAndUmbrellas.options(split), costCJ, costJC)[0]).join('|').replace(/\|./g, '');
