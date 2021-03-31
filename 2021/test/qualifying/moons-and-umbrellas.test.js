@@ -21,6 +21,10 @@ describe('solve', () => {
         expect(moonsAndUmbrellas.solve(2, -5, '??J??')).toBe(-8);
     });
 
+    test('4, 3, ?JC?JJJCCCC', () => {
+        expect(moonsAndUmbrellas.solve(4, 3, '?JC?JJJCCCC')).toBe(10);
+    });
+
     test('2, -5, C?C', () => {
         expect(moonsAndUmbrellas.solve(2, -5, 'C?C')).toBe(-3);
     });
