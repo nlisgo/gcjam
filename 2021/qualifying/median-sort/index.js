@@ -58,7 +58,7 @@ rl.on('line', (line) => {
                         valuePlaced = true;
                     } else if (response === queries[queries.length - 1][2]) {
                         findSection = false;
-                        positionIndex = organise.indexOf(queries[queries.length - 1][0]) - 2;
+                        positionIndex = organise.indexOf(queries[queries.length - 1][0]) - 1;
                     } else if (sectionQueries.length === 0 && response === queries[queries.length - 1][1]) {
                         findSection = false;
                         organise = organise.concat(valueToPlace);
