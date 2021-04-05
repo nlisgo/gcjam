@@ -7,13 +7,18 @@ const answersGiven = [];
 let organise = [];
 let positionIndex = 0;
 let queries = [];
+let mostExpensive = {
+    case: 0,
+    sequence: '',
+    queries: 0,
+};
 let sectionQueries = [];
 let response;
 let valueToPlace = 0;
 let valuesToPlace = [];
 let valuePlaced = false;
 let findSection = false;
-let sections = 4;
+let sections = 2;
 
 const postQuery = values => {
     queries.push(values);
@@ -86,7 +91,12 @@ rl.on('line', (line) => {
                         valueToPlace = valuesToPlace[0];
                         valuesToPlace = [...valuesToPlace.slice(1)];
                         valuePlaced = false;
-                        if (organise.length > 11) {
+                        if (organise.length > 2) {
+                            if (organise.length > 16) {
+                                sections = 4;
+                            } else {
+                                sections = 2;
+                            }
                             findSection = true;
                             sectionQueries = [];
                             let gap = Math.floor(organise.length / sections) - 1;
@@ -109,6 +119,11 @@ rl.on('line', (line) => {
                     }
                 } else {
                     postAnswer(organise);
+                    if (queries.length > mostExpensive.queries) {
+                        mostExpensive.case = answersGiven.length;
+                        mostExpensive.sequence = organise.join(' ');
+                        mostExpensive.queries = queries.length;
+                    }
                     queries = [];
                 }
             }
