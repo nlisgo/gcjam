@@ -57,18 +57,15 @@ rl.on('line', (line) => {
                 postQuery([organise[positionIndex], organise[positionIndex + 1], valueToPlace]);
             } else {
                 if (findSection) {
+                    findSection = false;
                     if (response === queries[queries.length - 1][0]) {
-                        findSection = false;
-                        organise = organise.slice(0, organise.indexOf(queries[queries.length - 1][0])).concat(valueToPlace, organise.slice(organise.indexOf(queries[queries.length - 1][0])));
-                        valuePlaced = true;
-                    } else if (response === queries[queries.length - 1][2]) {
-                        findSection = false;
-                        positionIndex = organise.indexOf(queries[queries.length - 1][0]) - 1;
-                    } else if (sectionQueries.length === 0 && response === queries[queries.length - 1][1]) {
-                        findSection = false;
-                        organise = organise.concat(valueToPlace);
-                        valuePlaced = true;
+                        positionIndex = -1;
+                    } else if (response === queries[queries.length - 1][1]) {
+                        positionIndex = organise.indexOf(queries[queries.length - 1][1]);
+                    } else {
+                        positionIndex = organise.indexOf(queries[queries.length - 1][0]);
                     }
+                    positionIndex -= 1;
                 } else {
                     if (response === queries[queries.length - 1][0]) {
                         // valueToPlace just before positionIndex
@@ -91,18 +88,11 @@ rl.on('line', (line) => {
                         valueToPlace = valuesToPlace[0];
                         valuesToPlace = [...valuesToPlace.slice(1)];
                         valuePlaced = false;
-                        if (organise.length > 2) {
-                            if (organise.length > 16) {
-                                sections = 4;
-                            } else {
-                                sections = 2;
-                            }
+                        if (organise.length > 11) {
                             findSection = true;
                             sectionQueries = [];
-                            let gap = Math.floor(organise.length / sections) - 1;
-                            for (let i = 0; i < sections; i++) {
-                                sectionQueries.push([organise[gap * i + i], organise[(i < sections - 1) ? gap * (i + 1) + i : organise.length - 1], valueToPlace]);
-                            }
+                            let gap = Math.floor(organise.length / 3);
+                            sectionQueries.push([organise[gap], organise[gap * 2], valueToPlace]);
                         }
                     } else {
                         positionIndex += 2;
