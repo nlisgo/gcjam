@@ -117,6 +117,7 @@ rl.on('line', (line) => {
                             gap = Math.floor(organise.length / 3);
                             sectionQueries.push([organise[gap], organise[gap * 2], valueToPlace]);
                             if (organise.length > 29) {
+                                // Place holder to indicate we should perform a sub section query
                                 sectionQueries.push([0, 0, 0]);
                             }
                         }
