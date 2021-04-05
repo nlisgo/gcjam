@@ -7,12 +7,13 @@ const answersGiven = [];
 let organise = [];
 let positionIndex = 0;
 let queries = [];
-let quarterQueries = [];
+let sectionQueries = [];
 let response;
 let valueToPlace = 0;
 let valuesToPlace = [];
 let valuePlaced = false;
-let findQuarter = false;
+let findSection = false;
+let sections = 4;
 
 const postQuery = values => {
     queries.push(values);
@@ -24,10 +25,10 @@ const postAnswer = answer => {
     console.log(answer.join(' '));
 };
 
-const getQuarterQuery = () => {
-    const nextQuery = quarterQueries[0];
-    quarterQueries = quarterQueries.slice(1);
-    return nextQuery;
+const getSectionQuery = () => {
+    const sectionQuery = sectionQueries[0];
+    sectionQueries = sectionQueries.slice(1);
+    return sectionQuery;
 };
 
 rl.on('line', (line) => {
@@ -50,30 +51,31 @@ rl.on('line', (line) => {
                 organise[1] = response;
                 postQuery([organise[positionIndex], organise[positionIndex + 1], valueToPlace]);
             } else {
-                if (findQuarter) {
-                    if (false && response === queries[queries.length - 1][0]) {
-                        throw new Error(organise);
-                        throw new Error(queries[queries.length - 1][0]);
-                        throw new Error(organise.slice(0, organise.indexOf(queries[queries.length - 1][0])));
-                    } else if (response === queries[queries.length - 1][4]) {
-                        findQuarter = false;
+                if (findSection) {
+                    if (response === queries[queries.length - 1][0]) {
+                        findSection = false;
+                        organise = organise.slice(0, organise.indexOf(queries[queries.length - 1][0])).concat(valueToPlace, organise.slice(organise.indexOf(queries[queries.length - 1][0])));
+                        valuePlaced = true;
+                    } else if (response === queries[queries.length - 1][2]) {
+                        findSection = false;
                         positionIndex = organise.indexOf(queries[queries.length - 1][0]) - 2;
-                    } else if (quarterQueries.length === 1) {
-                        findQuarter = false;
-                        positionIndex = organise.indexOf(getQuarterQuery()[0]) - 2;
+                    } else if (sectionQueries.length === 0 && response === queries[queries.length - 1][1]) {
+                        findSection = false;
+                        organise = organise.concat(valueToPlace);
+                        valuePlaced = true;
                     }
                 } else {
                     if (response === queries[queries.length - 1][0]) {
                         // valueToPlace just before positionIndex
-                        organise = organise.slice(0, positionIndex).concat([valueToPlace], organise.slice(positionIndex));
+                        organise = organise.slice(0, positionIndex).concat(valueToPlace, organise.slice(positionIndex));
                         valuePlaced = true;
                     } else if (response === queries[queries.length - 1][2]) {
                         // valueToPlace just after positionIndex
-                        organise = organise.slice(0, positionIndex + 1).concat([valueToPlace], organise.slice(positionIndex + 1));
+                        organise = organise.slice(0, positionIndex + 1).concat(valueToPlace, organise.slice(positionIndex + 1));
                         valuePlaced = true;
                     } else if (organise.length === positionIndex + 2) {
                         // valueToPlace at end
-                        organise = organise.concat([valueToPlace]);
+                        organise = organise.concat(valueToPlace);
                         valuePlaced = true;
                     }
                 }
@@ -85,11 +87,11 @@ rl.on('line', (line) => {
                         valuesToPlace = [...valuesToPlace.slice(1)];
                         valuePlaced = false;
                         if (organise.length > 11) {
-                            findQuarter = true;
-                            quarterQueries = [];
-                            let gap = Math.floor(organise.length / 4) - 1;
-                            for (let i = 0; i < 4; i++) {
-                                quarterQueries.push([organise[gap * i + i], organise[(i < 3) ? gap * (i + 1) + i : organise.length - 1], valueToPlace]);
+                            findSection = true;
+                            sectionQueries = [];
+                            let gap = Math.floor(organise.length / sections) - 1;
+                            for (let i = 0; i < sections; i++) {
+                                sectionQueries.push([organise[gap * i + i], organise[(i < sections - 1) ? gap * (i + 1) + i : organise.length - 1], valueToPlace]);
                             }
                         }
                     } else {
@@ -100,8 +102,8 @@ rl.on('line', (line) => {
                         positionIndex--;
                     }
     
-                    if (findQuarter) {
-                        postQuery(getQuarterQuery());
+                    if (findSection) {
+                        postQuery(getSectionQuery());
                     } else {
                         postQuery([organise[positionIndex], organise[positionIndex + 1], valueToPlace]);
                     }
