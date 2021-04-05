@@ -18,7 +18,8 @@ let valueToPlace = 0;
 let valuesToPlace = [];
 let valuePlaced = false;
 let findSection = false;
-let sections = 2;
+let gap = 4;
+let sectionJump = 0;
 
 const postQuery = values => {
     queries.push(values);
@@ -48,6 +49,7 @@ rl.on('line', (line) => {
             valueToPlace = 4;
             valuesToPlace = [...Array(N - 4).fill().map((_, i) => i + 5)];
             valuePlaced = false;
+            sectionJump = 0;
         } else {
             response = Number(line);
             if (queries.length === 1) {
@@ -57,18 +59,36 @@ rl.on('line', (line) => {
                 postQuery([organise[positionIndex], organise[positionIndex + 1], valueToPlace]);
             } else {
                 if (findSection) {
-                    if (response === queries[queries.length - 1][0]) {
+                    if (!getSectionQuery()) {
                         findSection = false;
-                        organise = organise.slice(0, organise.indexOf(queries[queries.length - 1][0])).concat(valueToPlace, organise.slice(organise.indexOf(queries[queries.length - 1][0])));
-                        valuePlaced = true;
-                    } else if (response === queries[queries.length - 1][2]) {
-                        findSection = false;
-                        positionIndex = organise.indexOf(queries[queries.length - 1][0]) - 1;
-                    } else if (sectionQueries.length === 0 && response === queries[queries.length - 1][1]) {
-                        findSection = false;
-                        organise = organise.concat(valueToPlace);
-                        valuePlaced = true;
+                    } else {
+                        gap = Math.floor(organise.length / 9);
                     }
+
+                    if (response === queries[queries.length - 1][0]) {
+                        if (findSection) {
+                            sectionQueries.push([organise[gap], organise[gap * 2], valueToPlace]);
+                            sectionJump = 0;
+                        } else {
+                            positionIndex = sectionJump - 1;
+                        }
+                    } else if (response === queries[queries.length - 1][1]) {
+                        if (findSection) {
+                            sectionQueries.push([organise[gap * 7], organise[gap * 8], valueToPlace]);
+                            sectionJump = organise.indexOf(queries[queries.length - 1][1]);
+                        } else {
+                            positionIndex = organise.indexOf(queries[queries.length - 1][1]);
+                        }
+                    } else {
+                        if (findSection) {
+                            sectionQueries.push([organise[gap * 4], organise[gap * 5], valueToPlace]);
+                            sectionJump = organise.indexOf(queries[queries.length - 1][0]);
+                        } else {
+                            positionIndex = organise.indexOf(queries[queries.length - 1][0]);
+                        }
+                    }
+
+                    positionIndex -= 1;
                 } else {
                     if (response === queries[queries.length - 1][0]) {
                         // valueToPlace just before positionIndex
@@ -91,17 +111,14 @@ rl.on('line', (line) => {
                         valueToPlace = valuesToPlace[0];
                         valuesToPlace = [...valuesToPlace.slice(1)];
                         valuePlaced = false;
-                        if (organise.length > 2) {
-                            if (organise.length > 16) {
-                                sections = 4;
-                            } else {
-                                sections = 2;
-                            }
+                        if (organise.length > 11) {
                             findSection = true;
                             sectionQueries = [];
-                            let gap = Math.floor(organise.length / sections) - 1;
-                            for (let i = 0; i < sections; i++) {
-                                sectionQueries.push([organise[gap * i + i], organise[(i < sections - 1) ? gap * (i + 1) + i : organise.length - 1], valueToPlace]);
+                            gap = Math.floor(organise.length / 3);
+                            sectionQueries.push([organise[gap], organise[gap * 2], valueToPlace]);
+                            if (organise.length > 29) {
+                                // Place holder to indicate we should perform a sub section query
+                                sectionQueries.push([0, 0, 0]);
                             }
                         }
                     } else {
