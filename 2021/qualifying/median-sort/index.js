@@ -18,7 +18,8 @@ let valueToPlace = 0;
 let valuesToPlace = [];
 let valuePlaced = false;
 let findSection = false;
-let sections = 2;
+let gap = 4;
+let sectionJump = 0;
 
 const postQuery = values => {
     queries.push(values);
@@ -48,6 +49,7 @@ rl.on('line', (line) => {
             valueToPlace = 4;
             valuesToPlace = [...Array(N - 4).fill().map((_, i) => i + 5)];
             valuePlaced = false;
+            sectionJump = 0;
         } else {
             response = Number(line);
             if (queries.length === 1) {
@@ -57,14 +59,35 @@ rl.on('line', (line) => {
                 postQuery([organise[positionIndex], organise[positionIndex + 1], valueToPlace]);
             } else {
                 if (findSection) {
-                    findSection = false;
-                    if (response === queries[queries.length - 1][0]) {
-                        positionIndex = -1;
-                    } else if (response === queries[queries.length - 1][1]) {
-                        positionIndex = organise.indexOf(queries[queries.length - 1][1]);
+                    if (!getSectionQuery()) {
+                        findSection = false;
                     } else {
-                        positionIndex = organise.indexOf(queries[queries.length - 1][0]);
+                        gap = Math.floor(organise.length / 9);
                     }
+
+                    if (response === queries[queries.length - 1][0]) {
+                        if (findSection) {
+                            sectionQueries.push([organise[gap], organise[gap * 2], valueToPlace]);
+                            sectionJump = 0;
+                        } else {
+                            positionIndex = sectionJump - 1;
+                        }
+                    } else if (response === queries[queries.length - 1][1]) {
+                        if (findSection) {
+                            sectionQueries.push([organise[gap * 7], organise[gap * 8], valueToPlace]);
+                            sectionJump = organise.indexOf(queries[queries.length - 1][1]);
+                        } else {
+                            positionIndex = organise.indexOf(queries[queries.length - 1][1]);
+                        }
+                    } else {
+                        if (findSection) {
+                            sectionQueries.push([organise[gap * 4], organise[gap * 5], valueToPlace]);
+                            sectionJump = organise.indexOf(queries[queries.length - 1][0]);
+                        } else {
+                            positionIndex = organise.indexOf(queries[queries.length - 1][0]);
+                        }
+                    }
+
                     positionIndex -= 1;
                 } else {
                     if (response === queries[queries.length - 1][0]) {
@@ -91,8 +114,11 @@ rl.on('line', (line) => {
                         if (organise.length > 11) {
                             findSection = true;
                             sectionQueries = [];
-                            let gap = Math.floor(organise.length / 3);
+                            gap = Math.floor(organise.length / 3);
                             sectionQueries.push([organise[gap], organise[gap * 2], valueToPlace]);
+                            if (organise.length > 29) {
+                                sectionQueries.push([0, 0, 0]);
+                            }
                         }
                     } else {
                         positionIndex += 2;
