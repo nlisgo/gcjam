@@ -16,15 +16,26 @@ const solve = input => {
 		return {
 			p: i,
 			score: scorePerson(row.split('')),
+			rating: 0,
 		};
 	}).sort((a, b) => (a.score < b.score) ? 1 : ((b.score < a.score) ? -1 : 0));
+
+	const rating = 3;
+	for (let i = 0; i < scoresPerson.length; i++) {
+		scoresPerson[i].rating = rating - ((i * rating * 2) / (scoresPerson.length - 1));
+	}
 
 	const scoresQuestion = [...transpose(input.map(row => row.split('')))].map((col, i) => {
 		return {
 			q: i,
 			score: scoreQuestion(col),
+			rating: 0,
 		};
 	}).sort((a, b) => (a.score < b.score) ? 1 : ((b.score < a.score) ? -1 : 0));
+
+	for (let i = 0; i < scoresQuestion.length; i++) {
+		scoresQuestion[i].rating = rating - ((i * rating * 2) / (scoresQuestion.length - 1));
+	}
 
 	return scoresPerson[0].p + 1;
 };
