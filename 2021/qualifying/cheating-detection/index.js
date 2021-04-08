@@ -11,13 +11,22 @@ const scoreCount = answers => answers.reduce((score, x) => (x == 1 ? score + 1 :
 
 const transpose = array => array[0].map((r, i) => array.map(c => c[i]));
 
-const indexOfMaxValue = a => a.reduce((iMax, x, i, arr) => x > arr[iMax] ? i : iMax, 0);
-
 const solve = input => {
-	const scoresPerson = input.map(row => scorePerson(row.split('')));
-	// const scoresQuestion = [...transpose(input.map(row => row.split('')))].map(scoreQuestion);
+	const scoresPerson = input.map((row, i) => {
+		return {
+			p: i,
+			score: scorePerson(row.split('')),
+		};
+	}).sort((a, b) => (a.score < b.score) ? 1 : ((b.score < a.score) ? -1 : 0));
 
-	return indexOfMaxValue(scoresPerson) + 1;
+	const scoresQuestion = [...transpose(input.map(row => row.split('')))].map((col, i) => {
+		return {
+			q: i,
+			score: scoreQuestion(col),
+		};
+	}).sort((a, b) => (a.score < b.score) ? 1 : ((b.score < a.score) ? -1 : 0));
+
+	return scoresPerson[0].p + 1;
 };
 
 const solveInputs = inputs => {
