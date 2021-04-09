@@ -30,18 +30,16 @@ const solve = input => {
 			score: scoreQuestion(col),
 			rating: 0,
 		};
-	}).sort((a, b) => (a.score < b.score) ? 1 : ((b.score < a.score) ? -1 : 0));
+	}).sort((a, b) => (a.score > b.score) ? 1 : ((b.score > a.score) ? -1 : 0));
 
 	const rating = 3;
 	for (let i = 0; i < scoresQuestion.length; i++) {
 		scoresQuestion[i].rating = rating - ((i * rating * 2) / (scoresQuestion.length - 1));
 	}
 
-	scoresQuestion = [...scoresQuestion.sort((a, b) => (a.q > b.q) ? 1 : ((b.q > a.q) ? -1 : 0))];
-
 	for (let i = 0; i < scoresPerson.length; i++) {
 		scoresPerson[i].rating = rating - ((i * rating * 2) / (scoresPerson.length - 1));
-		for (let j = 0; j < 2500; j++) {
+		for (let j = 0; j < 100; j++) {
 			let sig = sigmoid(scoresPerson[i].rating - scoresQuestion[j].rating);
 			scoresPerson[i].sig *= (input[scoresPerson[i].p] === '1') ? sig : 1 - sig;
 		}
