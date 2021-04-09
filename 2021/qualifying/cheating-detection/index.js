@@ -39,7 +39,7 @@ const solve = input => {
 
 	for (let i = 0; i < scoresPerson.length; i++) {
 		scoresPerson[i].rating = rating - ((i * rating * 2) / (scoresPerson.length - 1));
-		for (let j = 0; j < 100; j++) {
+		for (let j = 0; j < Math.min(scoresQuestion.length, 100); j++) {
 			let sig = sigmoid(scoresPerson[i].rating - scoresQuestion[j].rating);
 			scoresPerson[i].sig *= (input[scoresPerson[i].p] === '1') ? sig : 1 - sig;
 		}
