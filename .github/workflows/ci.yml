@@ -15,7 +15,7 @@ jobs:
     - uses: actions/checkout@v2
 
     - name: gcjam 2019 - npm install and test
-      run: docker run -v $(pwd)/2020:/app -w /app/test node /bin/bash -c "npm install && npm test"
+      run: docker run -v $(pwd)/2019:/app -w /app/test node /bin/bash -c "npm install && npm test"s
 
     - name: gcjam 2020 - npm install and test
       run: docker run -v $(pwd)/2020:/app -w /app/test node /bin/bash -c "npm install && npm test"
