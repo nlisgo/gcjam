@@ -31,3 +31,39 @@ describe('solveInputs', () => {
         );
     });
 });
+
+describe('checkA', () => {
+    test('4', () => {
+        expect(foregoneSolution.checkA('4')).toBe('3');
+    });
+
+    test('940', () => {
+        expect(foregoneSolution.checkA('940')).toBe('930');
+    });
+
+    test('4444', () => {
+        expect(foregoneSolution.checkA('4444')).toBe('3333');
+    });
+
+    test('123567890', () => {
+        expect(foregoneSolution.checkA('123567890')).toBe('123567890');
+    });
+});
+
+describe('checkB', () => {
+    test('4', () => {
+        expect(foregoneSolution.checkB('4')).toBe('1');
+    });
+
+    test('940', () => {
+        expect(foregoneSolution.checkB('940')).toBe('10');
+    });
+
+    test('4444', () => {
+        expect(foregoneSolution.checkB('4444')).toBe('1111');
+    });
+
+    test('123567890', () => {
+        expect(foregoneSolution.checkB('123567890')).toBe('');
+    });
+});

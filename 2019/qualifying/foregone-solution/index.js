@@ -2,21 +2,10 @@ Number.prototype.toCase = function () {
     return this.valueOf()+1;
 };
 
-const solve = input => {
-    let A = input.split('');
-    let B = [];
-    A.forEach((v, k) => {
-        if (v == '4') {
-            A[k] -= '1';
-            B.push('1');
-        }
-        else {
-            B.push('0');
-        }
-    });
+const solve = input => [checkA(input), checkB(input)].join(' ');
 
-    return [A.join(''), B.join('').replace(/^0+/, '')].join(' ');
-};
+const checkA = input => input.replaceAll(/4/g, '3');
+const checkB = input => input.replaceAll(/4/g, 'x').replaceAll(/[^x]/g, '0').replace(/^[0]+/, '').replaceAll(/[x]/g, '1');
 
 const solveInputs = inputs => {
 	const cases = [];
@@ -52,4 +41,6 @@ if (!Boolean(process.stdin.isTTY)) {
 module.exports = {
 	solve,
 	solveInputs,
+    checkA,
+    checkB,
 };
