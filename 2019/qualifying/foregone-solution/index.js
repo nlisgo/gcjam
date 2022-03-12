@@ -1,5 +1,7 @@
+const splitInput = input => input.slice(1);
+
 const solve = input => [checkA(input), checkB(input)].join(' ');
-const solveInputs = inputs => inputs.slice(1).map(solve).map((c, i) => `Case #${i+1}: ${c}`);
+const solveInputs = inputs => splitInput(inputs).map(solve).map((c, i) => `Case #${i+1}: ${c}`);
 
 const checkA = input => input.replaceAll(/4/g, '3');
 const checkB = input => input.replaceAll(/4/g, 'x').replaceAll(/[^x]/g, '0').replace(/^[0]+/, '').replaceAll(/[x]/g, '1');
