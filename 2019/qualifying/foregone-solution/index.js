@@ -6,20 +6,20 @@ const checkB = input => input.replaceAll(/4/g, 'x').replaceAll(/[^x]/g, '0').rep
 
 if (!Boolean(process.stdin.isTTY)) {
     const lines = [];
-	require('readline').createInterface({
-	    input: process.stdin,
-	}).on('line', line => {
-		lines.push(line);
-	}).on('close', () => {
+    require('readline').createInterface({
+        input: process.stdin,
+    }).on('line', line => {
+        lines.push(line);
+    }).on('close', () => {
         solveInputs(lines).forEach(line => {
             console.log(line);
         });
-	});
+    });
 }
 
 module.exports = {
-	solve,
-	solveInputs,
+    solve,
+    solveInputs,
     checkA,
     checkB,
 };
