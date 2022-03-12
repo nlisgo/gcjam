@@ -7,18 +7,32 @@ on:
     branches: [ master ]
 
 jobs:
-  test:
-    name: Test on ubuntu-18.04
+  gcj2019:
+    name: Google Code Jam 2019
     runs-on: ubuntu-18.04
 
     steps:
     - uses: actions/checkout@v2
 
-    - name: gcjam 2019 - npm install and test
+    - name: npm install and test
       run: docker run -v $(pwd)/2019:/app -w /app/test node /bin/bash -c "npm install && npm test"
 
-    - name: gcjam 2020 - npm install and test
+  gcj2020:
+    name: Google Code Jam 2020
+    runs-on: ubuntu-18.04
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: npm install and test
       run: docker run -v $(pwd)/2020:/app -w /app/test node /bin/bash -c "npm install && npm test"
 
-    - name: gcjam 2021 - npm install and test
+  gcj2021:
+    name: Google Code Jam 2021
+    runs-on: ubuntu-18.04
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: npm install and test
       run: docker run -v $(pwd)/2021:/app -w /app/test node /bin/bash -c "npm install && npm test"
