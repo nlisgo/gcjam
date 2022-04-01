@@ -48,6 +48,14 @@ die() {
   exit "$code"
 }
 
+check_file() {
+  local file=$1
+  if [ ! -f "../${file}" ]
+  then
+    die "File ${file} does not exist"
+  fi
+}
+
 parse_params() {
   # default values of variables set from params
 
@@ -76,74 +84,28 @@ cd ${script_dir}
 
 ./create 2022
 
-if [ ! -f "../2022/README.md" ]
-then
-  die "File 2022/README.md does not exist"
-fi
+declare -a files=("2022/README.md" "2022/qualifying/problem-a/index.js" "2022/qualifying/problem-a/sample.in" "2022/test/package.json" "2022/test/qualifying/problem-a.test.js" ".github/workflows/ci-2022.yml")
 
-if [ ! -f "../2022/qualifying/problem-a/index.js" ]
-then
-  die "File 2022/qualifying/problem-a/index.js does not exist"
-fi
-
-if [ ! -f "../2022/qualifying/problem-a/sample.in" ]
-then
-  die "File 2022/qualifying/problem-a/sample.in does not exist"
-fi
-
-if [ ! -f "../2022/test/package.json" ]
-then
-  die "File 2022/test/package.json does not exist"
-fi
-
-if [ ! -f "../2022/test/qualifying/problem-a.test.js" ]
-then
-  die "File 2022/test/qualifying/problem-a.test.js does not exist"
-fi
-
-if [ ! -f "../.github/workflows/ci-2022.yml" ]
-then
-  die "File .github/workflows/ci-2022.yml does not exist"
-fi
+for i in "${files[@]}"
+do
+  check_file ${i}
+done
 
 ./create 2999 new-stage "My New Stage" new-problem "My New Problem"
 
-if [ ! -f "../2999/README.md" ]
-then
-  die "File 2999/README.md does not exist"
-fi
+declare -a files=("2999/README.md" "2999/new-stage/new-problem/index.js" "2999/new-stage/new-problem/sample.in" "2999/test/package.json" "2999/test/new-stage/new-problem.test.js" ".github/workflows/ci-2999.yml")
 
-if [ ! -f "../2999/new-stage/new-problem/index.js" ]
-then
-  die "File 2999/new-stage/new-problem/index.js does not exist"
-fi
+for i in "${files[@]}"
+do
+  check_file ${i}
+done
 
-if [ ! -f "../2999/new-stage/new-problem/sample.in" ]
-then
-  die "File 2999/new-stage/new-problem/sample.in does not exist"
-fi
-
-if [ ! -f "../2999/test/package.json" ]
-then
-  die "File 2999/test/package.json does not exist"
-fi
-
-if [ ! -f "../2999/test/new-stage/new-problem.test.js" ]
-then
-  die "File 2999/test/new-stage/new-problem.test.js does not exist"
-fi
-
-if [ ! -f "../.github/workflows/ci-2999.yml" ]
-then
-  die "File .github/workflows/ci-2999.yml does not exist"
-fi
-
-grep -F "My New Problem" ../2999/README.md > /dev/null 2>&1
-grep -F "My New Stage" ../2999/README.md > /dev/null 2>&1
+grep -Fn "My New Problem" ../2999/README.md > /dev/null 2>&1
+grep -Fn "My New Stage" ../2999/README.md > /dev/null 2>&1
 grep -Fn "cat ./new-stage/new-problem/sample.in | docker run -i -v \$(pwd):/app -w /app/new-stage/new-problem node node index.js" ../2999/README.md > /dev/null 2>&1
 grep -Fn "docker run -it -v \$(pwd):/app -w /app/test node npm test new-stage/new-problem.test.js" ../2999/README.md > /dev/null 2>&1
 
-grep -F "const newProblem = require('../../new-stage/new-problem/index');" ../2999/test/new-stage/new-problem.test.js > /dev/null 2>&1
+grep -Fn "const newProblem = require('../../new-stage/new-problem/index');" ../2999/test/new-stage/new-problem.test.js > /dev/null 2>&1
 
-grep -F "name: Google Code Jam 2999" ../.github/workflows/ci-2999.yml > /dev/null 2>&1
+grep -Fn "name: Google Code Jam 2999" ../.github/workflows/ci-2999.yml > /dev/null 2>&1
 grep -Fn "run: docker run -v \$(pwd)/2999:/app -w /app/test node /bin/bash -c \"npm install && npm test\"" ../.github/workflows/ci-2999.yml > /dev/null 2>&1
