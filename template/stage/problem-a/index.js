@@ -16,7 +16,7 @@ const handleStdin = () => {
 	const inputs = [];
 	
 	const rl = readline.createInterface({
-	  input: process.stdin
+	  	input: process.stdin
 	});
 	
 	rl.on('line', line => {
