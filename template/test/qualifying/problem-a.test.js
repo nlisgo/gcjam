@@ -1,4 +1,4 @@
-const template = require('../template/index');
+const template = require('../../qualifying/problem-a/index');
 
 describe('solve', () => {
     test('one', () => {
