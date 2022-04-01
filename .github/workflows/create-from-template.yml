@@ -15,4 +15,4 @@ jobs:
     - uses: actions/checkout@v2
 
     - name: test-create
-      run: ./bin/test-create
+      run: docker run -v $(pwd):/app bash /app/bin/test-create
