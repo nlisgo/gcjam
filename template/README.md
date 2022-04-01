@@ -16,16 +16,16 @@ docker run -v $(pwd):/app -w /app/test node npm install
 docker run -it -v $(pwd):/app -w /app/test node npm test
 ```
 
-## Qualifying
+## Stage Title
 
 ## Problem A Title
 
 ```
-cat ./qualifying/problem-a/sample.in | docker run -i -v $(pwd):/app -w /app/qualifying/problem-a node node index.js
+cat ./stage/problem-a/sample.in | docker run -i -v $(pwd):/app -w /app/stage/problem-a node node index.js
 ```
 
 to run the tests:
 
 ```
-docker run -it -v $(pwd):/app -w /app/test node npm test qualifying/problem-a.test.js
+docker run -it -v $(pwd):/app -w /app/test node npm test stage/problem-a.test.js
 ```

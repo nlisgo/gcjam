@@ -9,7 +9,7 @@ script_dir=$(cd "$(dirname "${BASH_SOURCE[0]}")" &>/dev/null && pwd -P)
 
 usage() {
   cat << EOF # remove the space between << and EOF, this is due to web plugin issue
-Usage: $(basename "${BASH_SOURCE[0]}") [-h] [-v] folder_name
+Usage: $(basename "${BASH_SOURCE[0]}") [-h] [-v] folder_name stage stage_title problem problem_title
 
 Script description here.
 
@@ -72,22 +72,17 @@ setup_colors
 
 # script logic here
 
-# msg "${RED}Read parameters:${NOFORMAT}"
-# msg "- arguments: ${args[*]-}"
-
 cd ${script_dir}
 
 YEAR=${args[0]:-$(date +"%Y")}
 STAGE=${args[1]:-qualifying}
-STAGETITLE=$(echo ${STAGE} | awk '{$1=toupper(substr($1,0,1))substr($1,2)}1')
-PROBLEM=${args[2]:-problem-a}
-TITLE=${args[3]:-Problem A Title}
+STAGETITLE=${args[2]:-Qualification}
+PROBLEM=${args[3]:-problem-a}
+TITLE=${args[4]:-Problem A Title}
 
 STOREIFS=${IFS}
-
 IFS='-'
 PROBLEMVAR=$(echo ${PROBLEM} | sed -e 's/\-+/ /g' | awk '{for (i=1; i<=NF; i++) printf toupper(substr($i, 1, 1)) tolower(substr($i,2)); print ""}' | awk '{$1=tolower(substr($1,0,1))substr($1,2)}1')
-
 IFS=${STOREIFS}
 
 if [ ! -d "../${YEAR}" ]
@@ -127,7 +122,7 @@ fi
 
 if [ ! -f "../${YEAR}/README.md" ]
 then
-  awk '{gsub(/Problem A Title/,"'"${TITLE}"'"); print}' ../template/README.md | awk '{gsub(/problem-a/,"'"${PROBLEM}"'"); print}' > ../${YEAR}/README.md
+  awk '{gsub(/Stage Title/,"'"${STAGETITLE}"'"); print}' ../template/README.md | awk '{gsub(/Problem A Title/,"'"${TITLE}"'"); print}' | awk '{gsub(/stage/,"'"${STAGE}"'"); print}' | awk '{gsub(/problem-a/,"'"${PROBLEM}"'"); print}' > ../${YEAR}/README.md
 else
   msg "File ${YEAR}/README.md exists" 1
 fi
