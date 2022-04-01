@@ -110,6 +110,10 @@ grep -Fn "const newProblem = require('../../new-stage/new-problem/index');" ../2
 grep -Fn "name: Google Code Jam 2999" ../.github/workflows/ci-2999.yml > /dev/null 2>&1
 grep -Fn "run: docker run -v \$(pwd)/2999:/app -w /app/test node /bin/bash -c \"npm install && npm test\"" ../.github/workflows/ci-2999.yml > /dev/null 2>&1
 
-cd ../2999/test
+cd ${script_dir}/../2999/new-stage/new-problem
+
+cat sample.in | node ./index.js
+
+cd ${script_dir}/../2999/test
 
 npm install && npm test
