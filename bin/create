@@ -1,0 +1,168 @@
+#!/usr/bin/env bash
+
+# See: https://betterdev.blog/minimal-safe-bash-script-template/
+
+set -Eeuo pipefail
+trap cleanup SIGINT SIGTERM ERR EXIT
+
+script_dir=$(cd "$(dirname "${BASH_SOURCE[0]}")" &>/dev/null && pwd -P)
+
+usage() {
+  cat << EOF # remove the space between << and EOF, this is due to web plugin issue
+Usage: $(basename "${BASH_SOURCE[0]}") [-h] [-v] folder_name
+
+Script description here.
+
+Available options:
+
+-h, --help      Print this help and exit
+-V, --verbose   Print script debug info
+EOF
+  exit
+}
+
+cleanup() {
+  trap - SIGINT SIGTERM ERR EXIT
+  # script cleanup here
+}
+
+setup_colors() {
+  if [[ -t 2 ]] && [[ -z "${NO_COLOR-}" ]] && [[ "${TERM-}" != "dumb" ]]; then
+    NOFORMAT='\033[0m' RED='\033[0;31m' GREEN='\033[0;32m' ORANGE='\033[0;33m' BLUE='\033[0;34m' PURPLE='\033[0;35m' CYAN='\033[0;36m' YELLOW='\033[1;33m'
+  else
+    NOFORMAT='' RED='' GREEN='' ORANGE='' BLUE='' PURPLE='' CYAN='' YELLOW=''
+  fi
+}
+
+msg() {
+  if [[ ! ${2-} -eq 1 || -o xtrace ]]
+  then
+    echo >&2 -e "${1-}"
+  fi
+}
+
+die() {
+  local msg=$1
+  local code=${2-1} # default exit status 1
+  msg "$msg"
+  exit "$code"
+}
+
+parse_params() {
+  # default values of variables set from params
+
+  while :; do
+    case "${1-}" in
+    -h | --help) usage ;;
+    -V | --verbose) set -x ;;
+    --no-color) NO_COLOR=1 ;;
+    -?*) die "Unknown option: $1" ;;
+    *) break ;;
+    esac
+    shift
+  done
+
+  args=("$@")
+
+  return 0
+}
+
+parse_params "$@"
+setup_colors
+
+# script logic here
+
+# msg "${RED}Read parameters:${NOFORMAT}"
+# msg "- arguments: ${args[*]-}"
+
+cd ${script_dir}
+
+YEAR=${args[0]:-$(date +"%Y")}
+STAGE=${args[1]:-qualifying}
+STAGETITLE=$(echo ${STAGE} | awk '{$1=toupper(substr($1,0,1))substr($1,2)}1')
+PROBLEM=${args[2]:-problem-a}
+TITLE=${args[3]:-Problem A Title}
+
+STOREIFS=${IFS}
+
+IFS='-'
+PROBLEMVAR=$(echo ${PROBLEM} | sed -e 's/\-+/ /g' | awk '{for (i=1; i<=NF; i++) printf toupper(substr($i, 1, 1)) tolower(substr($i,2)); print ""}' | awk '{$1=tolower(substr($1,0,1))substr($1,2)}1')
+
+IFS=${STOREIFS}
+
+if [ ! -d "../${YEAR}" ]
+then
+  mkdir ../${YEAR}
+else
+  msg "Directory blahblah exists" 1
+fi
+
+if [ ! -d "../${YEAR}/${STAGE}" ]
+then
+  mkdir ../${YEAR}/${STAGE}
+else
+  msg "Directory ${YEAR}/${STAGE} exists" 1
+fi
+
+if [ ! -d "../${YEAR}/${STAGE}/${PROBLEM}" ]
+then
+  mkdir ../${YEAR}/${STAGE}/${PROBLEM}
+else
+  msg "Directory ${YEAR}/${STAGE}/${PROBLEM} exists" 1
+fi
+
+if [ ! -d "../${YEAR}/test" ]
+then
+  mkdir ../${YEAR}/test
+else
+  msg "Directory ${YEAR}/test exists" 1
+fi
+
+if [ ! -d "../${YEAR}/test/${STAGE}" ]
+then
+  mkdir ../${YEAR}/test/${STAGE}
+else
+  msg "Directory ${YEAR}/test/${STAGE} exists" 1
+fi
+
+if [ ! -f "../${YEAR}/README.md" ]
+then
+  awk '{gsub(/Problem A Title/,"'"${TITLE}"'"); print}' ../template/README.md | awk '{gsub(/problem-a/,"'"${PROBLEM}"'"); print}' > ../${YEAR}/README.md
+else
+  msg "File ${YEAR}/README.md exists" 1
+fi
+
+if [ ! -f "../${YEAR}/${STAGE}/${PROBLEM}/index.js" ]
+then
+  cp ../template/stage/problem-a/index.js ../${YEAR}/${STAGE}/${PROBLEM}/index.js
+else
+  msg "File ${YEAR}/${STAGE}/${PROBLEM}/index.js exists" 1
+fi
+
+if [ ! -f "../${YEAR}/${STAGE}/${PROBLEM}/sample.in" ]
+then
+  cp ../template/stage/problem-a/sample.in ../${YEAR}/${STAGE}/${PROBLEM}/sample.in
+else
+  msg "File ${YEAR}/${STAGE}/${PROBLEM}/sample.in exists" 1
+fi
+
+if [ ! -f "../${YEAR}/test/package.json" ]
+then
+  cp ../template/test/package.json ../${YEAR}/test/package.json
+else
+  msg "File ${YEAR}/test/package.json exists" 1
+fi
+
+if [ ! -f "../${YEAR}/test/${STAGE}/${PROBLEM}.test.js" ]
+then
+  awk '{gsub(/template/,"'"${PROBLEMVAR}"'"); print}' ../template/test/stage/problem-a.test.js | awk '{gsub(/stage\/problem-a/,"'"${STAGE}"'/'"${PROBLEM}"'"); print}' > ../${YEAR}/test/${STAGE}/${PROBLEM}.test.js
+else
+  msg "File ${YEAR}/test/${STAGE}/${PROBLEM}.test.js exists" 1
+fi
+
+if [ ! -f "../.github/workflows/ci-${YEAR}.yml" ]
+then
+  awk '{gsub(/YYYY/,"'"${YEAR}"'"); print}' ../template/ci-YYYY.yml > ../.github/workflows/ci-${YEAR}.yml
+else
+  msg "File .github/workflows/ci-${YEAR}.yml exists" 1
+fi

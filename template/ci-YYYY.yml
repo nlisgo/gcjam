@@ -1,0 +1,18 @@
+name: Google Code Jam YYYY
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  gcjYYYY:
+    name: Google Code Jam YYYY
+    runs-on: ubuntu-18.04
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: npm install and test
+      run: docker run -v $(pwd)/YYYY:/app -w /app/test node /bin/bash -c "npm install && npm test"

@@ -16,7 +16,7 @@ docker run -v $(pwd):/app -w /app/test node npm install
 docker run -it -v $(pwd):/app -w /app/test node npm test
 ```
 
-## Qualification
+## Qualifying
 
 ## Problem A Title
 
