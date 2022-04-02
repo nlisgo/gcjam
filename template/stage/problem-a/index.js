@@ -7,7 +7,7 @@ const splitInput = input => input.slice(1);
  * Accepts a single input case and returns the result as a string.
  */
 const solve = input => {
-	return input;
+    return input;
 };
 
 /**
