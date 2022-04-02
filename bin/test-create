@@ -84,8 +84,8 @@ cd ${script_dir}
 
 rm -rf ../2022
 rm -rf ../2999
-rm ../.github/workflows/ci-2022.yml
-rm ../.github/workflows/ci-2999.yml
+rm -f ../.github/workflows/ci-2022.yml
+rm -f ../.github/workflows/ci-2999.yml
 
 ./create 2022
 
