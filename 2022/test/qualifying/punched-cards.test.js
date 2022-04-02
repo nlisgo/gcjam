@@ -4,35 +4,53 @@ describe('splitInput', () => {
     test('sample.in', () => {
         expect(
             punchedCards.splitInput(`3
-one
-two
-three`.split(/\r?\n/))
-        )
+3 4
+2 2
+2 3`.split(/\r?\n/))
+)
         .toStrictEqual(
             [
-                'one',
-                'two',
-                'three',
+                [3, 4],
+                [2, 2],
+                [2, 3],
             ]
         );
     });
 });
 
 describe('solve', () => {
-    test('one', () => {
-        expect(punchedCards.solve('one')).toBe('one');
+    test('[3, 4]', () => {
+        expect(punchedCards.solve([3, 4])).toBe([
+            '',
+            '..+-+-+-+',
+            '..|.|.|.|',
+            '+-+-+-+-+',
+            '|.|.|.|.|',
+            '+-+-+-+-+',
+            '|.|.|.|.|',
+            '+-+-+-+-+',
+        ].join("\r\n"));
     });
     
-    test('two', () => {
-        expect(punchedCards.solve('two')).toBe('two');
+    test('[2, 2]', () => {
+        expect(punchedCards.solve(2, 2)).toBe([
+            '',
+            '..+-+',
+            '..|.|',
+            '+-+-+',
+            '|.|.|',
+            '+-+-+',
+        ].join("\r\n"));
     });
     
-    test('three', () => {
-        expect(punchedCards.solve('three')).toBe('three');
-    });
-    
-    test('four', () => {
-        expect(punchedCards.solve('four')).toBe('four');
+    test('[2, 3]', () => {
+        expect(punchedCards.solve(2, 3)).toBe([
+            '..+-+-+',
+            '..|.|.|',
+            '+-+-+-+',
+            '|.|.|.|',
+            '+-+-+-+',
+        ].join("\r\n"));
     });
 });
 
@@ -40,15 +58,38 @@ describe('solveInputs', () => {
     test('sample.in', () => {
         expect(
             punchedCards.solveInputs(`3
-one
-two
-three`.split(/\r?\n/))
+3 4
+2 2
+2 3`.split(/\r?\n/))
         )
         .toStrictEqual(
             [
-                'Case #1: one',
-                'Case #2: two',
-                'Case #3: three',
+                [
+                    'Case #1:',
+                    '..+-+-+-+',
+                    '..|.|.|.|',
+                    '+-+-+-+-+',
+                    '|.|.|.|.|',
+                    '+-+-+-+-+',
+                    '|.|.|.|.|',
+                    '+-+-+-+-+',
+                ].join("\r\n"),
+                [
+                    'Case #2:',
+                    '..+-+',
+                    '..|.|',
+                    '+-+-+',
+                    '|.|.|',
+                    '+-+-+',
+                ].join("\r\n"),
+                [
+                    'Case #3:',
+                    '..+-+-+',
+                    '..|.|.|',
+                    '+-+-+-+',
+                    '|.|.|.|',
+                    '+-+-+-+',
+                ].join("\r\n"),
             ]
         );
     });
