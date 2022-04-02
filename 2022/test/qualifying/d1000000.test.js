@@ -3,52 +3,64 @@ const d1000000 = require('../../qualifying/d1000000/index');
 describe('splitInput', () => {
     test('sample.in', () => {
         expect(
-            d1000000.splitInput(`3
-one
-two
-three`.split(/\r?\n/))
+            d1000000.splitInput(`4
+4
+6 10 12 8
+6
+5 4 5 4 4 4
+10
+10 10 7 6 7 4 4 5 7 4
+1
+10`.split(/\r?\n/))
         )
         .toStrictEqual(
             [
-                'one',
-                'two',
-                'three',
+                [6, 10, 12, 8],
+                [5, 4, 5, 4, 4, 4],
+                [10, 10, 7, 6, 7, 4, 4, 5, 7, 4],
+                [10],
             ]
         );
     });
 });
 
 describe('solve', () => {
-    test('one', () => {
-        expect(d1000000.solve('one')).toBe('one');
+    test('[6, 10, 12, 8]', () => {
+        expect(d1000000.solve([6, 10, 12, 8])).toBe(4);
     });
 
-    test('two', () => {
-        expect(d1000000.solve('two')).toBe('two');
+    test('[5, 4, 5, 4, 4, 4]', () => {
+        expect(d1000000.solve([5, 4, 5, 4, 4, 4])).toBe(5);
     });
 
-    test('three', () => {
-        expect(d1000000.solve('three')).toBe('three');
+    test('[10, 10, 7, 6, 7, 4, 4, 5, 7, 4]', () => {
+        expect(d1000000.solve([10, 10, 7, 6, 7, 4, 4, 5, 7, 4])).toBe(9);
     });
 
-    test('four', () => {
-        expect(d1000000.solve('four')).toBe('four');
+    test('[10]', () => {
+        expect(d1000000.solve([10])).toBe(1);
     });
 });
 
 describe('solveInputs', () => {
     test('sample.in', () => {
         expect(
-            d1000000.solveInputs(`3
-one
-two
-three`.split(/\r?\n/))
+            d1000000.solveInputs(`4
+4
+6 10 12 8
+6
+5 4 5 4 4 4
+10
+10 10 7 6 7 4 4 5 7 4
+1
+10`.split(/\r?\n/))
         )
         .toStrictEqual(
             [
-                'Case #1: one',
-                'Case #2: two',
-                'Case #3: three',
+                'Case #1: 4',
+                'Case #2: 5',
+                'Case #3: 9',
+                'Case #4: 1',
             ]
         );
     });
