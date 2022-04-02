@@ -1,5 +1,23 @@
 const template = require('../../stage/problem-a/index');
 
+describe('splitInput', () => {
+    test('sample.in', () => {
+        expect(
+            template.splitInput(`3
+one
+two
+three`.split(/\r?\n/))
+        )
+        .toStrictEqual(
+            [
+                'one',
+                'two',
+                'three',
+            ]
+        );
+    });
+});
+
 describe('solve', () => {
     test('one', () => {
         expect(template.solve('one')).toBe('one');
