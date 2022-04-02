@@ -82,6 +82,11 @@ setup_colors
 
 cd ${script_dir}
 
+rm -rf ../2022
+rm -rf ../2999
+rm ../.github/workflows/ci-2022.yml
+rm ../.github/workflows/ci-2999.yml
+
 ./create 2022
 
 declare -a files=("2022/README.md" "2022/qualifying/problem-a/index.js" "2022/qualifying/problem-a/sample.in" "2022/test/package.json" "2022/test/qualifying/problem-a.test.js" ".github/workflows/ci-2022.yml")
