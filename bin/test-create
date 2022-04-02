@@ -91,29 +91,40 @@ do
   check_file ${i}
 done
 
-./create 2999 new-stage "My New Stage" new-problem "My New Problem"
+./create 2999 new-stage "My New Stage" new-problem-a "My New Problem A"
+./create 2999 new-stage "My New Stage" new-problem-b "My New Problem B"
+./create 2999 final "Final Stage" final-a "Final Problem A"
 
-declare -a files=("2999/README.md" "2999/new-stage/new-problem/index.js" "2999/new-stage/new-problem/sample.in" "2999/test/package.json" "2999/test/new-stage/new-problem.test.js" ".github/workflows/ci-2999.yml")
+declare -a files=(".github/workflows/ci-2999.yml" "2999/README.md" "2999/test/package.json" "2999/new-stage/new-problem-a/index.js" "2999/new-stage/new-problem-a/sample.in" "2999/test/new-stage/new-problem-a.test.js" "2999/new-stage/new-problem-b/index.js" "2999/new-stage/new-problem-b/sample.in" "2999/test/new-stage/new-problem-b.test.js" "2999/final/final-a/index.js" "2999/final/final-a/sample.in" "2999/test/final/final-a.test.js")
 
 for i in "${files[@]}"
 do
   check_file ${i}
 done
 
-grep -Fn "My New Problem" ../2999/README.md > /dev/null 2>&1
 grep -Fn "My New Stage" ../2999/README.md > /dev/null 2>&1
-grep -Fn "cat ./new-stage/new-problem/sample.in | docker run -i -v \$(pwd):/app -w /app/new-stage/new-problem node node index.js" ../2999/README.md > /dev/null 2>&1
-grep -Fn "docker run -it -v \$(pwd):/app -w /app/test node npm test new-stage/new-problem.test.js" ../2999/README.md > /dev/null 2>&1
+grep -Fn "My New Problem A" ../2999/README.md > /dev/null 2>&1
+grep -Fn "My New Problem B" ../2999/README.md > /dev/null 2>&1
+grep -Fn "Final Stage" ../2999/README.md > /dev/null 2>&1
+grep -Fn "Final Problem A" ../2999/README.md > /dev/null 2>&1
+grep -Fn "cat ./new-stage/new-problem-a/sample.in | docker run -i -v \$(pwd):/app -w /app/new-stage/new-problem-a node node index.js" ../2999/README.md > /dev/null 2>&1
+grep -Fn "docker run -it -v \$(pwd):/app -w /app/test node npm test new-stage/new-problem-a.test.js" ../2999/README.md > /dev/null 2>&1
+grep -Fn "cat ./new-stage/new-problem-b/sample.in | docker run -i -v \$(pwd):/app -w /app/new-stage/new-problem-b node node index.js" ../2999/README.md > /dev/null 2>&1
+grep -Fn "docker run -it -v \$(pwd):/app -w /app/test node npm test new-stage/new-problem-b.test.js" ../2999/README.md > /dev/null 2>&1
+grep -Fn "cat ./final/final-a/sample.in | docker run -i -v \$(pwd):/app -w /app/final/final-a node node index.js" ../2999/README.md > /dev/null 2>&1
+grep -Fn "docker run -it -v \$(pwd):/app -w /app/test node npm test final/final-a.test.js" ../2999/README.md > /dev/null 2>&1
 
-grep -Fn "const newProblem = require('../../new-stage/new-problem/index');" ../2999/test/new-stage/new-problem.test.js > /dev/null 2>&1
+grep -Fn "const newProblemA = require('../../new-stage/new-problem-a/index');" ../2999/test/new-stage/new-problem-a.test.js > /dev/null 2>&1
+grep -Fn "const newProblemB = require('../../new-stage/new-problem-b/index');" ../2999/test/new-stage/new-problem-b.test.js > /dev/null 2>&1
+grep -Fn "const finalA = require('../../final/final-a/index');" ../2999/test/final/final-a.test.js > /dev/null 2>&1
 
 grep -Fn "name: Google Code Jam 2999" ../.github/workflows/ci-2999.yml > /dev/null 2>&1
 grep -Fn "run: docker run -v \$(pwd)/2999:/app -w /app/test node /bin/bash -c \"npm install && npm test\"" ../.github/workflows/ci-2999.yml > /dev/null 2>&1
 
-cd ${script_dir}/../2999/new-stage/new-problem
+cd ${script_dir}/../2999/new-stage/new-problem-a
 
 cat sample.in | node ./index.js
 
-cd ${script_dir}/../2999/test
+# cd ${script_dir}/../2999/test
 
-npm install && npm test
+# npm install && npm test
