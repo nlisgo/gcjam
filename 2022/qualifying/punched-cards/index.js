@@ -7,7 +7,29 @@ const splitInput = input => input.slice(1).map(i => i.split(' ').map(Number));
  * Accepts a single input case and returns the result as a string.
  */
 const solve = input => {
-	return input;
+    [r, c] = [...input];
+
+    let z = '+';
+    let y = '|';
+    for (let i = 0; i < c; i++) {
+        z += '-+';
+        y += '.|';
+    }
+
+    const card = [
+        '',
+        '..'+z.substring(2),
+        '..'+y.substring(2),
+    ];
+
+    for (let i = 0; i < r-1; i++) {
+        card.push(z);
+        card.push(y);
+    }
+
+    card.push(z);
+
+	return card.join("\r\n");
 };
 
 /**
