@@ -53,4 +53,20 @@ docker run -it -v $(pwd):/app -w /app/test node npm test qualifying/3d-printing.
 
 <!-- problem-end: qualifying:3d-printing -->
 
+## d1000000
+
+<!-- problem-start: qualifying:d1000000 -->
+
+```
+cat ./qualifying/d1000000/sample.in | docker run -i -v $(pwd):/app -w /app/qualifying/d1000000 node node index.js
+```
+
+to run the tests:
+
+```
+docker run -it -v $(pwd):/app -w /app/test node npm test qualifying/d1000000.test.js
+```
+
+<!-- problem-end: qualifying:d1000000 -->
+
 <!-- stage-end: qualifying -->
