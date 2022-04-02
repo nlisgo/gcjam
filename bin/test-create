@@ -125,6 +125,6 @@ cd ${script_dir}/../2999/new-stage/new-problem-a
 
 cat sample.in | node ./index.js
 
-# cd ${script_dir}/../2999/test
+cd ${script_dir}/../2999/test
 
-# npm install && npm test
+npm install && npm test
