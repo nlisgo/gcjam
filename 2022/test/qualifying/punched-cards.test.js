@@ -1,7 +1,7 @@
 const punchedCards = require('../../qualifying/punched-cards/index');
 
 describe('splitInput', () => {
-    test('sample.in', () => {
+    test.only('sample.in', () => {
         expect(
             punchedCards.splitInput(`3
 3 4
