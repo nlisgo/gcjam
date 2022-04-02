@@ -9,14 +9,18 @@ script_dir=$(cd "$(dirname "${BASH_SOURCE[0]}")" &>/dev/null && pwd -P)
 
 usage() {
   cat << EOF # remove the space between << and EOF, this is due to web plugin issue
-Usage: $(basename "${BASH_SOURCE[0]}") [-h] [-v] folder_name stage stage_title problem problem_title
+Usage: $(basename "${BASH_SOURCE[0]}") [-h] [-V] [-r] [-st "Stage Title"] [-pt "Problem Title"] [-pv "problemVariable"] year stage problem
 
 Script description here.
 
 Available options:
 
--h, --help      Print this help and exit
--V, --verbose   Print script debug info
+-h, --help            Print this help and exit
+-V, --verbose         Print script debug info
+-r, --readme          Generate README.md entry
+-st, --stage-title    Stage title (e.g. Qualification)
+-pt, --problem-title  Problem title
+-pv, --problem-var    Problem variable name
 EOF
   exit
 }
@@ -60,12 +64,29 @@ create_folder() {
 
 parse_params() {
   # default values of variables set from params
+  readme=0
+  stage_title=''
+  problem_title=''
+  problem_var=''
 
   while :; do
     case "${1-}" in
     -h | --help) usage ;;
     -V | --verbose) set -x ;;
     --no-color) NO_COLOR=1 ;;
+    -r | --readme) readme=1 ;; # flag to trigger README.md generation or entry
+    -st | --stage-title)
+      stage_title="${2-}"
+      shift
+      ;;
+    -pt | --problem-title)
+      problem_title="${2-}"
+      shift
+      ;;
+    -pv | --problem-variable)
+      problem_var="${2-}"
+      shift
+      ;;
     -?*) die "Unknown option: $1" ;;
     *) break ;;
     esac
@@ -86,13 +107,13 @@ cd ${script_dir}
 
 YEAR=${args[0]:-$(date +"%Y")}
 STAGE=${args[1]:-qualifying}
-STAGETITLE=${args[2]:-Qualification}
-PROBLEM=${args[3]:-problem-a}
-TITLE=${args[4]:-Problem A Title}
+STAGETITLE=${stage_title:-${args[1]:-Qualification}}
+PROBLEM=${args[2]:-problem-a}
+PROBLEMTITLE=${problem_title:-${args[2]:-Problem A}}
 
 STOREIFS=${IFS}
 IFS='-'
-PROBLEMVAR=$(echo ${PROBLEM} | sed -e 's/\-+/ /g' | awk '{for (i=1; i<=NF; i++) printf toupper(substr($i, 1, 1)) tolower(substr($i,2)); print ""}' | awk '{$1=tolower(substr($1,0,1))substr($1,2)}1')
+PROBLEMVAR=${problem_var:-$(echo ${PROBLEM} | sed -e 's/\-+/ /g' | awk '{for (i=1; i<=NF; i++) printf toupper(substr($i, 1, 1)) tolower(substr($i,2)); print ""}' | awk '{$1=tolower(substr($1,0,1))substr($1,2)}1')}
 IFS=${STOREIFS}
 
 declare -a folders=("${YEAR}" "${YEAR}/${STAGE}" "${YEAR}/${STAGE}/${PROBLEM}" "${YEAR}/test" "${YEAR}/test/${STAGE}")
@@ -118,7 +139,7 @@ if [ $(grep -c "<!-- problem-end: ${STAGE}:${PROBLEM} -->" ../${YEAR}/README.md)
 then
   line=$(awk '/<!-- stage-end: '"${STAGE}"' -->/{ print NR-1; exit }' ../${YEAR}/README.md)
   head -${line} ../${YEAR}/README.md > tmp-README.md
-  awk '{gsub(/Title/,"'"${TITLE}"'"); print}' ../template/README-problem.md | awk '{gsub(/id/,"'"${STAGE}"':'"${PROBLEM}"'"); print}' | awk '{gsub(/stage/,"'"${STAGE}"'"); print}' | awk '{gsub(/problem-a/,"'"${PROBLEM}"'"); print}' >> tmp-README.md
+  awk '{gsub(/Title/,"'"${PROBLEMTITLE}"'"); print}' ../template/README-problem.md | awk '{gsub(/id/,"'"${STAGE}"':'"${PROBLEM}"'"); print}' | awk '{gsub(/stage/,"'"${STAGE}"'"); print}' | awk '{gsub(/problem-a/,"'"${PROBLEM}"'"); print}' >> tmp-README.md
   tail +${line} ../${YEAR}/README.md >> tmp-README.md
   mv tmp-README.md ../${YEAR}/README.md
 fi

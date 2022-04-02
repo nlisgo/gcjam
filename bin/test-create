@@ -9,7 +9,7 @@ script_dir=$(cd "$(dirname "${BASH_SOURCE[0]}")" &>/dev/null && pwd -P)
 
 usage() {
   cat << EOF # remove the space between << and EOF, this is due to web plugin issue
-Usage: $(basename "${BASH_SOURCE[0]}") [-h] [-v]
+Usage: $(basename "${BASH_SOURCE[0]}") [-h] [-V]
 
 Script description here.
 
@@ -96,9 +96,9 @@ do
   check_file ${i}
 done
 
-./create 2999 new-stage "My New Stage" new-problem-a "My New Problem A"
-./create 2999 new-stage "My New Stage" new-problem-b "My New Problem B"
-./create 2999 final "Final Stage" final-a "Final Problem A"
+./create -st "My New Stage" -pt "My New Problem A" 2999 new-stage new-problem-a
+./create -pt "My New Problem B" 2999 new-stage new-problem-b
+./create -st "Final Stage" -pt "Final Problem A" 2999 final final-a
 
 declare -a files=(".github/workflows/ci-2999.yml" "2999/README.md" "2999/test/package.json" "2999/new-stage/new-problem-a/index.js" "2999/new-stage/new-problem-a/sample.in" "2999/test/new-stage/new-problem-a.test.js" "2999/new-stage/new-problem-b/index.js" "2999/new-stage/new-problem-b/sample.in" "2999/test/new-stage/new-problem-b.test.js" "2999/final/final-a/index.js" "2999/final/final-a/sample.in" "2999/test/final/final-a.test.js")
 
