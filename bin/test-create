@@ -82,19 +82,19 @@ setup_colors
 
 cd ${script_dir}
 
-rm -rf ../2022
+rm -rf ../2122
 rm -rf ../2999
-rm -f ../.github/workflows/ci-2022.yml
+rm -f ../.github/workflows/ci-2122.yml
 rm -f ../.github/workflows/ci-2999.yml
 
-./create 2022
+./create 2122
 
-if [ -f "../2022/README.md" ]
+if [ -f "../2122/README.md" ]
 then
-  die "File 2022/README.md exists"
+  die "File 2122/README.md exists"
 fi
 
-declare -a files=("2022/qualifying/problem-a/index.js" "2022/qualifying/problem-a/sample.in" "2022/test/package.json" "2022/test/qualifying/problem-a.test.js" ".github/workflows/ci-2022.yml")
+declare -a files=("2122/qualifying/problem-a/index.js" "2122/qualifying/problem-a/sample.in" "2122/test/package.json" "2122/test/qualifying/problem-a.test.js" ".github/workflows/ci-2122.yml")
 
 for i in "${files[@]}"
 do
