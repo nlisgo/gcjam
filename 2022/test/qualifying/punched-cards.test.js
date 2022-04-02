@@ -19,7 +19,7 @@ describe('splitInput', () => {
 });
 
 describe('solve', () => {
-    test('[3, 4]', () => {
+    test.only('[3, 4]', () => {
         expect(punchedCards.solve([3, 4])).toBe([
             '',
             '..+-+-+-+',
