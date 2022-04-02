@@ -58,17 +58,6 @@ create_folder() {
   fi
 }
 
-check_file() {
-  local file=$1
-  if [ -f "../${file}" ]
-  then
-    msg "File ${file} exists" 1
-    true; return
-  else
-    false; return
-  fi
-}
-
 parse_params() {
   # default values of variables set from params
 
@@ -113,32 +102,58 @@ do
   create_folder ${i}
 done
 
-if [ ! $(check_file "${YEAR}/README.md") ]
+if [ ! -f "../${YEAR}/README.md" ]
 then
-  awk '{gsub(/Stage Title/,"'"${STAGETITLE}"'"); print}' ../template/README.md | awk '{gsub(/Problem A Title/,"'"${TITLE}"'"); print}' | awk '{gsub(/stage/,"'"${STAGE}"'"); print}' | awk '{gsub(/problem-a/,"'"${PROBLEM}"'"); print}' > ../${YEAR}/README.md
+  cp ../template/README.md ../${YEAR}/README.md
+else
+  msg "File ${YEAR}/README.md exists" 1
 fi
 
-if [ ! $(check_file "${YEAR}/${STAGE}/${PROBLEM}/index.js") ]
+if [ $(grep -c "<!-- stage-end: ${STAGE} -->" ../${YEAR}/README.md) -eq 0 ]
+then
+  awk '{gsub(/Title/,"'"${STAGETITLE}"'"); print}' ../template/README-stage.md | awk '{gsub(/id/,"'"${STAGE}"'"); print}' >> ../${YEAR}/README.md
+fi
+
+if [ $(grep -c "<!-- problem-end: ${STAGE}:${PROBLEM} -->" ../${YEAR}/README.md) -eq 0 ]
+then
+  line=$(awk '/<!-- stage-end: '"${STAGE}"' -->/{ print NR-1; exit }' ../${YEAR}/README.md)
+  head -${line} ../${YEAR}/README.md > tmp-README.md
+  awk '{gsub(/Title/,"'"${TITLE}"'"); print}' ../template/README-problem.md | awk '{gsub(/id/,"'"${STAGE}"':'"${PROBLEM}"'"); print}' | awk '{gsub(/stage/,"'"${STAGE}"'"); print}' | awk '{gsub(/problem-a/,"'"${PROBLEM}"'"); print}' >> tmp-README.md
+  tail +${line} ../${YEAR}/README.md >> tmp-README.md
+  mv tmp-README.md ../${YEAR}/README.md
+fi
+
+if [ ! -f "../${YEAR}/${STAGE}/${PROBLEM}/index.js" ]
 then
   cp ../template/stage/problem-a/index.js ../${YEAR}/${STAGE}/${PROBLEM}/index.js
+else
+  msg "File ${YEAR}/${STAGE}/${PROBLEM}/index.js exists" 1
 fi
 
-if [ ! $(check_file "${YEAR}/${STAGE}/${PROBLEM}/sample.in") ]
+if [ ! -f "../${YEAR}/${STAGE}/${PROBLEM}/sample.in" ]
 then
   cp ../template/stage/problem-a/sample.in ../${YEAR}/${STAGE}/${PROBLEM}/sample.in
+else
+  msg "File ${YEAR}/${STAGE}/${PROBLEM}/sample.in exists" 1
 fi
 
-if [ ! $(check_file "${YEAR}/test/package.json") ]
+if [ ! -f "../${YEAR}/test/package.json" ]
 then
   cp ../template/test/package.json ../${YEAR}/test/package.json
+else
+  msg "File ${YEAR}/test/package.json exists" 1
 fi
 
-if [ ! $(check_file "${YEAR}/test/${STAGE}/${PROBLEM}.test.js") ]
+if [ ! -f "../${YEAR}/test/${STAGE}/${PROBLEM}.test.js" ]
 then
   awk '{gsub(/template/,"'"${PROBLEMVAR}"'"); print}' ../template/test/stage/problem-a.test.js | awk '{gsub(/stage\/problem-a/,"'"${STAGE}"'/'"${PROBLEM}"'"); print}' > ../${YEAR}/test/${STAGE}/${PROBLEM}.test.js
+else
+  msg "File ${YEAR}/test/${STAGE}/${PROBLEM}.test.js exists" 1
 fi
 
-if [ ! $(check_file ".github/workflows/ci-${YEAR}.ym") ]
+if [ ! -f "../.github/workflows/ci-${YEAR}.yml" ]
 then
   awk '{gsub(/YYYY/,"'"${YEAR}"'"); print}' ../template/ci-YYYY.yml > ../.github/workflows/ci-${YEAR}.yml
+else
+  msg "File ../.github/workflows/ci-${YEAR}.yml exists" 1
 fi
