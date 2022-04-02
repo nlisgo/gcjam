@@ -1,13 +1,30 @@
 /**
  * Accepts an array of lines and organises into separate cases.
  */
-const splitInput = input => input.slice(1);
+const splitInput = input => {
+    const cases = [];
+
+    for (let i = 0; i < input.slice(1).length; i += 2) {
+        cases.push(input[i+2].split(' ').map(Number));
+    }
+
+    return cases;
+};
 
 /**
  * Accepts a single input case and returns the result as a string.
  */
 const solve = input => {
-	return input;
+    const ordered = input.sort((a, b) => a-b);
+    let run = 0;
+
+    ordered.forEach(i => {
+        if (i > run) {
+            run++;
+        }
+    });
+
+    return run;
 };
 
 /**
