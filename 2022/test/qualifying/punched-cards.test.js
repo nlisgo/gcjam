@@ -21,7 +21,6 @@ describe('splitInput', () => {
 describe('solve', () => {
     test('[3, 4]', () => {
         expect(punchedCards.solve([3, 4])).toBe([
-            '',
             '..+-+-+-+',
             '..|.|.|.|',
             '+-+-+-+-+',
@@ -34,7 +33,6 @@ describe('solve', () => {
 
     test('[2, 2]', () => {
         expect(punchedCards.solve([2, 2])).toBe([
-            '',
             '..+-+',
             '..|.|',
             '+-+-+',
@@ -45,7 +43,6 @@ describe('solve', () => {
 
     test('[2, 3]', () => {
         expect(punchedCards.solve([2, 3])).toBe([
-            '',
             '..+-+-+',
             '..|.|.|',
             '+-+-+-+',

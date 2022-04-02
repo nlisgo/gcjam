@@ -23,7 +23,6 @@ const solve = input => {
     }
 
     const card = [
-        '',
         '..'+z.substring(2),
         '..'+y.substring(2),
     ];
@@ -44,7 +43,8 @@ const solve = input => {
 const solveInputs = inputs => {
 	const cases = [];
 	splitInput(inputs).forEach((data, i) => {
-		cases.push(`Case #${i+1}:${solve(data)}`);
+		cases.push(`Case #${i+1}:
+${solve(data)}`);
 	});
 	return cases;
 };
