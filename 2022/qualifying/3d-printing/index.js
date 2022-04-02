@@ -17,9 +17,61 @@ const splitInput = input => {
 /**
  * Accepts a single input case and returns the result as a string.
  */
-const solve = input => {
-	return input;
+const solve = input => {        
+    [printer1, printer2, printer3] = [...input];
+
+    minL = minLevels(input);
+
+    if (minL.reduce((a, c) => a +c) < 1000000) {
+        return 'IMPOSSIBLE';
+    }
+
+    let target = 1000000;
+    const solution = [];
+
+    minL.forEach(l => {
+        if (target > l) {
+            solution.push(l);
+        } else if (target > 0) {
+            solution.push(target);
+        } else {
+            solution.push(0);
+        }
+
+        target -= l;
+    });
+
+	return solution.join(' ');
 };
+
+/**
+ * For all printers return minimum levels for all ink.
+ */
+const minLevels = printers => {
+    let c = -1;
+    let m = -1;
+    let y = -1;
+    let k = -1;
+
+    printers.forEach(printer => {
+        if (c < 0 || printer[0] < c) {
+            c = printer[0];
+        }
+        if (m < 0 || printer[1] < m) {
+            m = printer[1];
+        }
+        if (y < 0 || printer[2] < y) {
+            y = printer[2];
+        }
+        if (k < 0 || printer[3] < k) {
+            k = printer[3];
+        }
+    });
+
+    return [c, m, y, k];
+};
+
+const ink = printer => printer.reduce((a, c) => a + c);
 
 /**
  * Accepts all lines of input and prepares all solutions.
@@ -54,6 +106,7 @@ if (!Boolean(process.stdin.isTTY)) {
  * Export all functions that we want to test.
  */
 module.exports = {
+    minLevels,
 	splitInput,
 	solve,
 	solveInputs,
