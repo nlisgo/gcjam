@@ -31,7 +31,7 @@ describe('solve', () => {
             '+-+-+-+-+',
         ].join("\n"));
     });
-    
+
     test('[2, 2]', () => {
         expect(punchedCards.solve([2, 2])).toBe([
             '',
@@ -42,7 +42,7 @@ describe('solve', () => {
             '+-+-+',
         ].join("\n"));
     });
-    
+
     test('[2, 3]', () => {
         expect(punchedCards.solve([2, 3])).toBe([
             '',

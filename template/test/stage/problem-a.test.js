@@ -22,15 +22,15 @@ describe('solve', () => {
     test('one', () => {
         expect(template.solve('one')).toBe('one');
     });
-    
+
     test('two', () => {
         expect(template.solve('two')).toBe('two');
     });
-    
+
     test('three', () => {
         expect(template.solve('three')).toBe('three');
     });
-    
+
     test('four', () => {
         expect(template.solve('four')).toBe('four');
     });
