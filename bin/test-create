@@ -89,16 +89,21 @@ rm -f ../.github/workflows/ci-2999.yml
 
 ./create 2022
 
-declare -a files=("2022/README.md" "2022/qualifying/problem-a/index.js" "2022/qualifying/problem-a/sample.in" "2022/test/package.json" "2022/test/qualifying/problem-a.test.js" ".github/workflows/ci-2022.yml")
+if [ -f "../2022/README.md" ]
+then
+  die "File 2022/README.md exists"
+fi
+
+declare -a files=("2022/qualifying/problem-a/index.js" "2022/qualifying/problem-a/sample.in" "2022/test/package.json" "2022/test/qualifying/problem-a.test.js" ".github/workflows/ci-2022.yml")
 
 for i in "${files[@]}"
 do
   check_file ${i}
 done
 
-./create -st "My New Stage" -pt "My New Problem A" 2999 new-stage new-problem-a
-./create -pt "My New Problem B" 2999 new-stage new-problem-b
-./create -st "Final Stage" -pt "Final Problem A" 2999 final final-a
+./create -r -st "My New Stage" -pt "My New Problem A" 2999 new-stage new-problem-a
+./create -r -pt "My New Problem B" 2999 new-stage new-problem-b
+./create -r -st "Final Stage" -pt "Final Problem A" 2999 final final-a
 
 declare -a files=(".github/workflows/ci-2999.yml" "2999/README.md" "2999/test/package.json" "2999/new-stage/new-problem-a/index.js" "2999/new-stage/new-problem-a/sample.in" "2999/test/new-stage/new-problem-a.test.js" "2999/new-stage/new-problem-b/index.js" "2999/new-stage/new-problem-b/sample.in" "2999/test/new-stage/new-problem-b.test.js" "2999/final/final-a/index.js" "2999/final/final-a/sample.in" "2999/test/final/final-a.test.js")
 

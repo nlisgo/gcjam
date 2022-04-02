@@ -123,25 +123,28 @@ do
   create_folder ${i}
 done
 
-if [ ! -f "../${YEAR}/README.md" ]
+if [ $readme -eq 1 ]
 then
-  cp ../template/README.md ../${YEAR}/README.md
-else
-  msg "File ${YEAR}/README.md exists" 1
-fi
+  if [ ! -f "../${YEAR}/README.md" ]
+  then
+    cp ../template/README.md ../${YEAR}/README.md
+  else
+    msg "File ${YEAR}/README.md exists" 1
+  fi
 
-if [ $(grep -c "<!-- stage-end: ${STAGE} -->" ../${YEAR}/README.md) -eq 0 ]
-then
-  awk '{gsub(/Title/,"'"${STAGETITLE}"'"); print}' ../template/README-stage.md | awk '{gsub(/id/,"'"${STAGE}"'"); print}' >> ../${YEAR}/README.md
-fi
+  if [ $(grep -c "<!-- stage-end: ${STAGE} -->" ../${YEAR}/README.md) -eq 0 ]
+  then
+    awk '{gsub(/Title/,"'"${STAGETITLE}"'"); print}' ../template/README-stage.md | awk '{gsub(/id/,"'"${STAGE}"'"); print}' >> ../${YEAR}/README.md
+  fi
 
-if [ $(grep -c "<!-- problem-end: ${STAGE}:${PROBLEM} -->" ../${YEAR}/README.md) -eq 0 ]
-then
-  line=$(awk '/<!-- stage-end: '"${STAGE}"' -->/{ print NR-1; exit }' ../${YEAR}/README.md)
-  head -${line} ../${YEAR}/README.md > tmp-README.md
-  awk '{gsub(/Title/,"'"${PROBLEMTITLE}"'"); print}' ../template/README-problem.md | awk '{gsub(/id/,"'"${STAGE}"':'"${PROBLEM}"'"); print}' | awk '{gsub(/stage/,"'"${STAGE}"'"); print}' | awk '{gsub(/problem-a/,"'"${PROBLEM}"'"); print}' >> tmp-README.md
-  tail +${line} ../${YEAR}/README.md >> tmp-README.md
-  mv tmp-README.md ../${YEAR}/README.md
+  if [ $(grep -c "<!-- problem-end: ${STAGE}:${PROBLEM} -->" ../${YEAR}/README.md) -eq 0 ]
+  then
+    line=$(awk '/<!-- stage-end: '"${STAGE}"' -->/{ print NR-1; exit }' ../${YEAR}/README.md)
+    head -${line} ../${YEAR}/README.md > tmp-README.md
+    awk '{gsub(/Title/,"'"${PROBLEMTITLE}"'"); print}' ../template/README-problem.md | awk '{gsub(/id/,"'"${STAGE}"':'"${PROBLEM}"'"); print}' | awk '{gsub(/stage/,"'"${STAGE}"'"); print}' | awk '{gsub(/problem-a/,"'"${PROBLEM}"'"); print}' >> tmp-README.md
+    tail +${line} ../${YEAR}/README.md >> tmp-README.md
+    mv tmp-README.md ../${YEAR}/README.md
+  fi
 fi
 
 if [ ! -f "../${YEAR}/${STAGE}/${PROBLEM}/index.js" ]
