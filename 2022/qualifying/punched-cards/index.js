@@ -1,4 +1,10 @@
 /**
+ * Punch Cards
+ * 
+ * See: https://codingcompetitions.withgoogle.com/codejam/round/0000000000876ff1/0000000000a4621b
+ */
+
+/**
  * Accepts an array of lines and organises into separate cases.
  */
 const splitInput = input => input.slice(1).map(i => i.split(' ').map(Number));
