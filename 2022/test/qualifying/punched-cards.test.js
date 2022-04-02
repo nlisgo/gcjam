@@ -1,7 +1,7 @@
 const punchedCards = require('../../qualifying/punched-cards/index');
 
 describe('splitInput', () => {
-    test.only('sample.in', () => {
+    test('sample.in', () => {
         expect(
             punchedCards.splitInput(`3
 3 4
@@ -19,7 +19,7 @@ describe('splitInput', () => {
 });
 
 describe('solve', () => {
-    test.only('[3, 4]', () => {
+    test('[3, 4]', () => {
         expect(punchedCards.solve([3, 4])).toBe([
             '',
             '..+-+-+-+',
@@ -29,28 +29,29 @@ describe('solve', () => {
             '+-+-+-+-+',
             '|.|.|.|.|',
             '+-+-+-+-+',
-        ].join("\r\n"));
+        ].join("\n"));
     });
     
     test('[2, 2]', () => {
-        expect(punchedCards.solve(2, 2)).toBe([
+        expect(punchedCards.solve([2, 2])).toBe([
             '',
             '..+-+',
             '..|.|',
             '+-+-+',
             '|.|.|',
             '+-+-+',
-        ].join("\r\n"));
+        ].join("\n"));
     });
     
     test('[2, 3]', () => {
-        expect(punchedCards.solve(2, 3)).toBe([
+        expect(punchedCards.solve([2, 3])).toBe([
+            '',
             '..+-+-+',
             '..|.|.|',
             '+-+-+-+',
             '|.|.|.|',
             '+-+-+-+',
-        ].join("\r\n"));
+        ].join("\n"));
     });
 });
 
@@ -73,7 +74,7 @@ describe('solveInputs', () => {
                     '+-+-+-+-+',
                     '|.|.|.|.|',
                     '+-+-+-+-+',
-                ].join("\r\n"),
+                ].join("\n"),
                 [
                     'Case #2:',
                     '..+-+',
@@ -81,7 +82,7 @@ describe('solveInputs', () => {
                     '+-+-+',
                     '|.|.|',
                     '+-+-+',
-                ].join("\r\n"),
+                ].join("\n"),
                 [
                     'Case #3:',
                     '..+-+-+',
@@ -89,7 +90,7 @@ describe('solveInputs', () => {
                     '+-+-+-+',
                     '|.|.|.|',
                     '+-+-+-+',
-                ].join("\r\n"),
+                ].join("\n"),
             ]
         );
     });

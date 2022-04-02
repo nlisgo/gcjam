@@ -29,7 +29,7 @@ const solve = input => {
 
     card.push(z);
 
-	return card.join("\r\n");
+	return card.join("\n");
 };
 
 /**
@@ -38,7 +38,7 @@ const solve = input => {
 const solveInputs = inputs => {
 	const cases = [];
 	splitInput(inputs).forEach((data, i) => {
-		cases.push(`Case #${i+1}: ${solve(data)}`);
+		cases.push(`Case #${i+1}:${solve(data)}`);
 	});
 	return cases;
 };
