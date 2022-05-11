@@ -13,12 +13,12 @@ cd ./gcjam
 docker run -v $(pwd):/app bash /app/bin/create --help
 ```
 
-> Usage: create [-h] [-v] folder_name stage stage_title problem problem_title
+> Usage: create [-h] [-V] [-r] [-st "Stage Title"] [-pt "Problem Title"] [-pv "problemVariable"] year stage problem
 
 ### Example
 
 ```
-docker run -v $(pwd):/app bash /app/bin/create 2022 qualifying "Qualification" problem-name "Problem Title"
+docker run -v $(pwd):/app bash /app/bin/create -r -st "Qualification" -pt "Problem Title" -pv "problemTitle" 2022 qualifying problem-name
 ```
 
 If this is the first time setting up for the 2022 folder then the folder should have been create with boiler plate code.
