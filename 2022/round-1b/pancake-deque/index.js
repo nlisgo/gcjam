@@ -1,7 +1,7 @@
 /**
  * Accepts an array of lines and organises into separate cases.
  */
-const splitInput = input => input.slice(1);
+const splitInput = input => input.slice(1).filter((_, i) => i % 2).map(i => i.split(' ').map(Number));
 
 /**
  * Accepts a single input case and returns the result as a string.
