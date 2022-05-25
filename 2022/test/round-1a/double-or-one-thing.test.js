@@ -1,4 +1,4 @@
-const doubleOrOneThing = require('../../round-1c/double-or-one-thing/index');
+const doubleOrOneThing = require('../../round-1a/double-or-one-thing/index');
 
 describe('splitInput', () => {
     test('sample.in', () => {
