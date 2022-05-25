@@ -112,11 +112,11 @@ do
   check_file ${i}
 done
 
-grep -Fn "My New Stage" ../2999/README.md > /dev/null 2>&1
-grep -Fn "My New Problem A" ../2999/README.md > /dev/null 2>&1
-grep -Fn "My New Problem B" ../2999/README.md > /dev/null 2>&1
-grep -Fn "Final Stage" ../2999/README.md > /dev/null 2>&1
-grep -Fn "Final Problem A" ../2999/README.md > /dev/null 2>&1
+grep "^## My New Stage" ../2999/README.md > /dev/null 2>&1
+grep "^### My New Problem A" ../2999/README.md > /dev/null 2>&1
+grep "^### My New Problem B" ../2999/README.md > /dev/null 2>&1
+grep "^## Final Stage" ../2999/README.md > /dev/null 2>&1
+grep "^### Final Problem A" ../2999/README.md > /dev/null 2>&1
 grep -Fn "cat ./new-stage/new-problem-a/sample.in | docker run -i -v \$(pwd):/app -w /app/new-stage/new-problem-a node node index.js" ../2999/README.md > /dev/null 2>&1
 grep -Fn "docker run -it -v \$(pwd):/app -w /app/test node npm test new-stage/new-problem-a.test.js" ../2999/README.md > /dev/null 2>&1
 grep -Fn "cat ./new-stage/new-problem-b/sample.in | docker run -i -v \$(pwd):/app -w /app/new-stage/new-problem-b node node index.js" ../2999/README.md > /dev/null 2>&1
