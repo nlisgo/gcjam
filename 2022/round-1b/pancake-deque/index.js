@@ -3,6 +3,7 @@
  */
 const splitInput = input => input.slice(1).filter((_, i) => i % 2).map(i => i.split(' ').map(Number));
 
+// Sort pancakes by selecting lowest deliciousness at either end of stack.
 const orderPancakes = pancakes => {
     const ordered = [];
     while (pancakes.length > 0) {
@@ -26,17 +27,18 @@ const orderPancakes = pancakes => {
  */
 const solve = input => {
     const ordered = orderPancakes(input);
-    let count = 1;
+    let charge = 1;
     let max = ordered[0];
 
+    // If pancake is as delicious as the most delicious they've eaten, charge them.
     ordered.slice(1).forEach(p => {
         if (p >= max) {
-            count++;
+            charge++;
             max = p;
         }
     });
 
-    return count;
+    return charge;
 };
 
 /**
