@@ -17,6 +17,8 @@ const orderPancakes = pancakes => {
             ordered.push(pancakes[pancakes.length - 1]);
             pancakes = [...pancakes.slice(0, -1)];
         }
+
+        pancakes = pancakes.filter(pancake => pancake >= ordered.slice(-1));
     }
 
     return ordered;
@@ -25,21 +27,7 @@ const orderPancakes = pancakes => {
 /**
  * Accepts a single input case and returns the result as a string.
  */
-const solve = input => {
-    const ordered = orderPancakes(input);
-    let charge = 1;
-    let max = ordered[0];
-
-    // If pancake is as delicious as the most delicious they've eaten, charge them.
-    ordered.slice(1).forEach(p => {
-        if (p >= max) {
-            charge++;
-            max = p;
-        }
-    });
-
-    return charge;
-};
+const solve = input => orderPancakes(input).length;
 
 /**
  * Accepts all lines of input and prepares all solutions.

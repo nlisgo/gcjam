@@ -30,7 +30,7 @@ describe('orderPancakes', () => {
     });
 
     test('[1, 4, 2, 3]', () => {
-        expect(pancakeDeque.orderPancakes([1, 4, 2, 3])).toStrictEqual([1, 3, 2, 4]);
+        expect(pancakeDeque.orderPancakes([1, 4, 2, 3])).toStrictEqual([1, 3, 4]);
     });
 
     test('[10, 10, 10, 10, 10]', () => {
@@ -38,7 +38,7 @@ describe('orderPancakes', () => {
     });
 
     test('[7, 1, 3, 1000000]', () => {
-        expect(pancakeDeque.orderPancakes([7, 1, 3, 1000000])).toStrictEqual([7, 1, 3, 1000000]);
+        expect(pancakeDeque.orderPancakes([7, 1, 3, 1000000])).toStrictEqual([7, 1000000]);
     });
 });
 
