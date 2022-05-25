@@ -30,7 +30,7 @@ docker run -it -v $(pwd):/app -w /app/test node npm test template.test.js
 
 ## Qualification
 
-## Foregone Solution
+### Foregone Solution
 
 ```
 cat ./qualifying/foregone-solution/sample.in | docker run -i -v $(pwd):/app -w /app/qualifying/foregone-solution node node index.js
