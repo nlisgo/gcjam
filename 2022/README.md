@@ -74,22 +74,22 @@ docker run -it -v $(pwd):/app -w /app/test node npm test qualifying/d1000000.tes
 <!-- stage-end: round-1b -->
 ## Round 1A
 
-<!-- stage-start: round-1c -->
+<!-- stage-start: round-1a -->
 
 ### Double or One Thing
 
-<!-- problem-start: round-1c:double-or-one-thing -->
+<!-- problem-start: round-1a:double-or-one-thing -->
 
 ```
-cat ./round-1c/double-or-one-thing/sample.in | docker run -i -v $(pwd):/app -w /app/round-1c/double-or-one-thing node node index.js
+cat ./round-1a/double-or-one-thing/sample.in | docker run -i -v $(pwd):/app -w /app/round-1a/double-or-one-thing node node index.js
 ```
 
 to run the tests:
 
 ```
-docker run -it -v $(pwd):/app -w /app/test node npm test round-1c/double-or-one-thing.test.js
+docker run -it -v $(pwd):/app -w /app/test node npm test round-1a/double-or-one-thing.test.js
 ```
 
-<!-- problem-end: round-1c:double-or-one-thing -->
+<!-- problem-end: round-1a:double-or-one-thing -->
 
-<!-- stage-end: round-1c -->
+<!-- stage-end: round-1a -->
