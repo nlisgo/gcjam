@@ -3,31 +3,37 @@
  */
 const splitInput = input => input.slice(1).filter((_, i) => i % 2).map(i => i.split(' ').map(Number));
 
-// Sort pancakes by selecting lowest deliciousness at either end of stack.
-const orderPancakes = pancakes => {
-    const ordered = [];
-    while (pancakes.length > 0) {
-        if (pancakes.length === 1) {
-            ordered.push(pancakes[0]);
-            pancakes = [];
-        } else if (pancakes[0] < pancakes[pancakes.length - 1]) {
-            ordered.push(pancakes[0]);
-            pancakes = [...pancakes.slice(1)];
-        } else {
-            ordered.push(pancakes[pancakes.length - 1]);
-            pancakes = [...pancakes.slice(0, -1)];
-        }
-
-        pancakes = pancakes.filter(pancake => pancake >= ordered.slice(-1));
-    }
-
-    return ordered;
-};
-
 /**
  * Accepts a single input case and returns the result as a string.
  */
-const solve = input => orderPancakes(input).length;
+const solve = input => {
+    let maxD = 0;
+    let countR = 0;
+    let charge = 0;
+    for (let i = 0; i < input.length - countR; i++) {
+        if (input[i] < maxD) {
+            continue;
+        }
+
+        while (input[input.length - countR - 1] < maxD) {
+            countR++;
+            continue;
+        }
+
+        while (input[input.length - countR - 1] < input[i]) {
+            if (input[input.length - countR - 1] >= maxD) {
+                maxD = input[input.length - countR - 1];
+                charge++;
+            }
+            countR++;
+        }
+
+        maxD = input[i];
+        charge++;
+    }
+
+    return charge;
+};
 
 /**
  * Accepts all lines of input and prepares all solutions.
@@ -62,7 +68,6 @@ if (!Boolean(process.stdin.isTTY)) {
  * Export all functions that we want to test.
  */
 module.exports = {
-    orderPancakes,
 	splitInput,
 	solve,
 	solveInputs,

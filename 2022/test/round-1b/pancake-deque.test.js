@@ -24,24 +24,6 @@ describe('splitInput', () => {
     });
 });
 
-describe('orderPancakes', () => {
-    test('[1, 5]', () => {
-        expect(pancakeDeque.orderPancakes([1, 5])).toStrictEqual([1, 5]);
-    });
-
-    test('[1, 4, 2, 3]', () => {
-        expect(pancakeDeque.orderPancakes([1, 4, 2, 3])).toStrictEqual([1, 3, 4]);
-    });
-
-    test('[10, 10, 10, 10, 10]', () => {
-        expect(pancakeDeque.orderPancakes([10, 10, 10, 10, 10])).toStrictEqual([10, 10, 10, 10, 10]);
-    });
-
-    test('[7, 1, 3, 1000000]', () => {
-        expect(pancakeDeque.orderPancakes([7, 1, 3, 1000000])).toStrictEqual([7, 1000000]);
-    });
-});
-
 describe('solve', () => {
     test('[1, 5]', () => {
         expect(pancakeDeque.solve([1, 5])).toBe(2);
