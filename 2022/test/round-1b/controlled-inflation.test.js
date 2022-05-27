@@ -35,7 +35,7 @@ describe('splitInput', () => {
 });
 
 describe('solve', () => {
-    test('[30, 10, 40], [20, 50, 60], [60, 60, 50]', () => {
+    test.only('[30, 10, 40], [20, 50, 60], [60, 60, 50]', () => {
         expect(controlledInflation.solve([
             [30, 10, 40],
             [20, 50, 60],
