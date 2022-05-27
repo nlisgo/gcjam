@@ -18,7 +18,21 @@ const splitInput = input => {
  * Accepts a single input case and returns the result as a string.
  */
 const solve = input => {
-    return input;
+    const limits = input.map((product, i) => {
+        const max = Math.max(...product);
+        const min = (i === 0) ? max : Math.min(...product);
+        return [min, max];
+    });
+
+    let [shortestToLowest, shortestToHighest] = limits[0];
+
+    limits.slice(1).forEach(([lowest, highest], i) => {
+        const diff = highest - lowest;
+        shortestToLowest += Math.min(...limits[i].map(prev => Math.abs(prev-lowest) + diff));
+        shortestToHighest += Math.min(...limits[i].map(prev => Math.abs(prev-highest) + diff));
+    });
+
+    return Math.min(shortestToLowest, shortestToHighest);
 };
 
 /**
