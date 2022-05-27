@@ -41,10 +41,10 @@ describe('solve', () => {
             [20, 50, 60],
             [60, 60, 50],
         ])).toStrictEqual([
-            // [startingPosition, lowest, highest, endPosition]
-            [0, 10, 40, 20], // 60
-            [20, 20, 60, 60], // 40
-            [60, 50, 60, null], // 10
+            // [lowest, highest, endPosition]
+            [0, 40, 40], // 40
+            [20, 60, 60], // 40 + 20 + 40 = 100
+            [50, 60, 50], // 100 + 10 = 100
         ]);
     });
 
