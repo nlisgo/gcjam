@@ -71,6 +71,22 @@ docker run -it -v $(pwd):/app -w /app/test node npm test qualifying/d1000000.tes
 
 <!-- stage-end: qualifying -->
 
+### Controlled Inflation
+
+<!-- problem-start: round-1b:controlled-inflation -->
+
+```
+cat ./round-1b/controlled-inflation/sample.in | docker run -i -v $(pwd):/app -w /app/round-1b/controlled-inflation node node index.js
+```
+
+to run the tests:
+
+```
+docker run -it -v $(pwd):/app -w /app/test node npm test round-1b/controlled-inflation.test.js
+```
+
+<!-- problem-end: round-1b:controlled-inflation -->
+
 <!-- stage-end: round-1b -->
 ## Round 1A
 
