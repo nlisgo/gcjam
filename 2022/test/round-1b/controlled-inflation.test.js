@@ -1,7 +1,7 @@
 const controlledInflation = require('../../round-1b/controlled-inflation/index');
 
 describe('splitInput', () => {
-    test('sample.in', () => {
+    test.only('sample.in', () => {
         expect(
             controlledInflation.splitInput(`2
 3 3

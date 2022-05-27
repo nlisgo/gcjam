@@ -1,7 +1,18 @@
 /**
  * Accepts an array of lines and organises into separate cases.
  */
-const splitInput = input => input.slice(1);
+const splitInput = input => {
+    const cases = [];
+    const limit = Number(input.splice(0, 1));
+
+    let customers = 0;
+    while (cases.length < limit) {
+        [customers] = input.splice(0, 1)[0].split(' ').map(Number);
+        cases.push(input.splice(0, customers).map(products => products.split(' ').map(Number)));
+    }
+
+    return cases;
+};
 
 /**
  * Accepts a single input case and returns the result as a string.
