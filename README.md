@@ -23,3 +23,7 @@ npx gcjam-create -r -st "Qualification" -pt "Problem Title" -pv "problemTitle" 2
 If this is the first time setting up for the 2022 folder then the folder should have been create with boiler plate code.
 
 See the README in the 2022 folder.
+
+### My solutions
+
+Visit: https://github.com/nlisgo/gcjam-solutions
