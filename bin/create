@@ -5,6 +5,7 @@
 set -Eeuo pipefail
 trap cleanup SIGINT SIGTERM ERR EXIT
 
+# See: https://stackoverflow.com/questions/59895/how-can-i-get-the-directory-where-a-bash-script-is-located-from-within-the-scrip#answer-246128
 call_dir=$( pwd )
 source=${BASH_SOURCE[0]}
 while [ -L "$source" ]; do # resolve $source until the file is no longer a symlink
