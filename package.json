@@ -1,0 +1,25 @@
+{
+  "name": "@nlisgo/gcjam",
+  "version": "1.0.5",
+  "description": "Boilerplate code to assist in solving Google Code Jam problems in Javascript",
+  "bin": {
+    "gcjam-create": "./bin/create"
+  },
+  "main": "index.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nlisgo/gcjam.git"
+  },
+  "author": "nlisgo",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/nlisgo/gcjam/issues"
+  },
+  "homepage": "https://github.com/nlisgo/gcjam#readme"
+}

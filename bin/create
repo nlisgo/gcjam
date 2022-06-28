@@ -5,11 +5,18 @@
 set -Eeuo pipefail
 trap cleanup SIGINT SIGTERM ERR EXIT
 
-script_dir=$(cd "$(dirname "${BASH_SOURCE[0]}")" &>/dev/null && pwd -P)
+call_dir=$( pwd )
+source=${BASH_SOURCE[0]}
+while [ -L "$source" ]; do # resolve $source until the file is no longer a symlink
+  script_dir=$( cd -P "$( dirname "$source" )" >/dev/null 2>&1 && pwd )
+  source=$(readlink "$source")
+  [[ $source != /* ]] && source=$script_dir/$source # if $source was a relative symlink, we need to resolve it relative to the path where the symlink file was located
+done
+script_dir=$( cd -P "$( dirname "$source" )" >/dev/null 2>&1 && pwd )
 
 usage() {
   cat << EOF # remove the space between << and EOF, this is due to web plugin issue
-Usage: $(basename "${BASH_SOURCE[0]}") [-h] [-V] [-r] [-st "Stage Title"] [-pt "Problem Title"] [-pv "problemVariable"] year stage problem
+Usage: $(basename "$source") [-h] [-V] [-r] [-st "Stage Title"] [-pt "Problem Title"] [-pv "problemVariable"] year stage problem
 
 Script description here.
 
@@ -54,9 +61,9 @@ die() {
 
 create_folder() {
   local folder=$1
-  if [ ! -d "../${folder}" ]
+  if [ ! -d "${call_dir}/${folder}" ]
   then
-    mkdir ../${folder}
+    mkdir ${call_dir}/${folder}
   else
     msg "Directory ${folder} exists" 1
   fi
@@ -116,7 +123,7 @@ IFS='-'
 PROBLEMVAR=${problem_var:-$(echo ${PROBLEM} | sed -e 's/\-+/ /g' | awk '{for (i=1; i<=NF; i++) printf toupper(substr($i, 1, 1)) tolower(substr($i,2)); print ""}' | awk '{$1=tolower(substr($1,0,1))substr($1,2)}1')}
 IFS=${STOREIFS}
 
-declare -a folders=("${YEAR}" "${YEAR}/${STAGE}" "${YEAR}/${STAGE}/${PROBLEM}" "${YEAR}/test" "${YEAR}/test/${STAGE}")
+declare -a folders=("${YEAR}" "${YEAR}/${STAGE}" "${YEAR}/${STAGE}/${PROBLEM}" "${YEAR}/test" "${YEAR}/test/${STAGE}" ".github" ".github/workflows")
 
 for i in "${folders[@]}"
 do
@@ -125,59 +132,59 @@ done
 
 if [ $readme -eq 1 ]
 then
-  if [ ! -f "../${YEAR}/README.md" ]
+  if [ ! -f "${call_dir}/${YEAR}/README.md" ]
   then
-    cp ../template/README.md ../${YEAR}/README.md
+    cp ../template/README.md ${call_dir}/${YEAR}/README.md
   else
     msg "File ${YEAR}/README.md exists" 1
   fi
 
-  if [ $(grep -c "<!-- stage-end: ${STAGE} -->" ../${YEAR}/README.md) -eq 0 ]
+  if [ $(grep -c "<!-- stage-end: ${STAGE} -->" ${call_dir}/${YEAR}/README.md) -eq 0 ]
   then
-    awk '{gsub(/Title/,"'"${STAGETITLE}"'"); print}' ../template/README-stage.md | awk '{gsub(/id/,"'"${STAGE}"'"); print}' >> ../${YEAR}/README.md
+    awk '{gsub(/Title/,"'"${STAGETITLE}"'"); print}' ../template/README-stage.md | awk '{gsub(/id/,"'"${STAGE}"'"); print}' >> ${call_dir}/${YEAR}/README.md
   fi
 
-  if [ $(grep -c "<!-- problem-end: ${STAGE}:${PROBLEM} -->" ../${YEAR}/README.md) -eq 0 ]
+  if [ $(grep -c "<!-- problem-end: ${STAGE}:${PROBLEM} -->" ${call_dir}/${YEAR}/README.md) -eq 0 ]
   then
-    line=$(awk '/<!-- stage-end: '"${STAGE}"' -->/{ print NR-1; exit }' ../${YEAR}/README.md)
-    head -${line} ../${YEAR}/README.md > tmp-README.md
+    line=$(awk '/<!-- stage-end: '"${STAGE}"' -->/{ print NR-1; exit }' ${call_dir}/${YEAR}/README.md)
+    head -${line} ${call_dir}/${YEAR}/README.md > tmp-README.md
     awk '{gsub(/Title/,"'"${PROBLEMTITLE}"'"); print}' ../template/README-problem.md | awk '{gsub(/id/,"'"${STAGE}"':'"${PROBLEM}"'"); print}' | awk '{gsub(/stage/,"'"${STAGE}"'"); print}' | awk '{gsub(/problem-a/,"'"${PROBLEM}"'"); print}' >> tmp-README.md
-    tail +${line} ../${YEAR}/README.md >> tmp-README.md
-    mv tmp-README.md ../${YEAR}/README.md
+    tail +${line} ${call_dir}/${YEAR}/README.md >> tmp-README.md
+    mv tmp-README.md ${call_dir}/${YEAR}/README.md
   fi
 fi
 
-if [ ! -f "../${YEAR}/${STAGE}/${PROBLEM}/index.js" ]
+if [ ! -f "${call_dir}/${YEAR}/${STAGE}/${PROBLEM}/index.js" ]
 then
-  cp ../template/stage/problem-a/index.js ../${YEAR}/${STAGE}/${PROBLEM}/index.js
+  cp ../template/stage/problem-a/index.js ${call_dir}/${YEAR}/${STAGE}/${PROBLEM}/index.js
 else
   msg "File ${YEAR}/${STAGE}/${PROBLEM}/index.js exists" 1
 fi
 
-if [ ! -f "../${YEAR}/${STAGE}/${PROBLEM}/sample.in" ]
+if [ ! -f "${call_dir}/${YEAR}/${STAGE}/${PROBLEM}/sample.in" ]
 then
-  cp ../template/stage/problem-a/sample.in ../${YEAR}/${STAGE}/${PROBLEM}/sample.in
+  cp ../template/stage/problem-a/sample.in ${call_dir}/${YEAR}/${STAGE}/${PROBLEM}/sample.in
 else
   msg "File ${YEAR}/${STAGE}/${PROBLEM}/sample.in exists" 1
 fi
 
-if [ ! -f "../${YEAR}/test/package.json" ]
+if [ ! -f "${call_dir}/${YEAR}/test/package.json" ]
 then
-  cp ../template/test/package.json ../${YEAR}/test/package.json
+  cp ../template/test/package.json ${call_dir}/${YEAR}/test/package.json
 else
   msg "File ${YEAR}/test/package.json exists" 1
 fi
 
-if [ ! -f "../${YEAR}/test/${STAGE}/${PROBLEM}.test.js" ]
+if [ ! -f "${call_dir}/${YEAR}/test/${STAGE}/${PROBLEM}.test.js" ]
 then
-  awk '{gsub(/template/,"'"${PROBLEMVAR}"'"); print}' ../template/test/stage/problem-a.test.js | awk '{gsub(/stage\/problem-a/,"'"${STAGE}"'/'"${PROBLEM}"'"); print}' > ../${YEAR}/test/${STAGE}/${PROBLEM}.test.js
+  awk '{gsub(/template/,"'"${PROBLEMVAR}"'"); print}' ../template/test/stage/problem-a.test.js | awk '{gsub(/stage\/problem-a/,"'"${STAGE}"'/'"${PROBLEM}"'"); print}' > ${call_dir}/${YEAR}/test/${STAGE}/${PROBLEM}.test.js
 else
   msg "File ${YEAR}/test/${STAGE}/${PROBLEM}.test.js exists" 1
 fi
 
-if [ ! -f "../.github/workflows/ci-${YEAR}.yml" ]
+if [ ! -f "${call_dir}/.github/workflows/ci-${YEAR}.yml" ]
 then
-  awk '{gsub(/YYYY/,"'"${YEAR}"'"); print}' ../template/ci-YYYY.yml > ../.github/workflows/ci-${YEAR}.yml
+  awk '{gsub(/YYYY/,"'"${YEAR}"'"); print}' ../template/ci-YYYY.yml > ${call_dir}/.github/workflows/ci-${YEAR}.yml
 else
-  msg "File ../.github/workflows/ci-${YEAR}.yml exists" 1
+  msg "File .github/workflows/ci-${YEAR}.yml exists" 1
 fi
